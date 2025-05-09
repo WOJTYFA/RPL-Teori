@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="532.0" prefWidth="621.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.week11.DaftarCatatanController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <GridPane hgap="10.0" prefHeight="97.0" prefWidth="574.0" vgap="10.0" VBox.vgrow="ALWAYS">
+      <rowConstraints>
+        <RowConstraints vgrow="ALWAYS" />
+         <RowConstraints />
+         <RowConstraints maxHeight="27.999975585937506" minHeight="19.199987792968756" prefHeight="20.000018310546878" />
+         <RowConstraints maxHeight="29.60001220703124" minHeight="10.0" prefHeight="29.59998168945313" />
+      </rowConstraints>
+      <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="286.40001220703124" minWidth="100.79996795654296" prefWidth="155.99997558593748" />
+         <ColumnConstraints maxWidth="469.60002441406255" minWidth="154.39998779296872" prefWidth="441.60002441406255" />
+      </columnConstraints>
+      <children>
+          <Label text="Keterangan : " GridPane.rowIndex="3" />
+          <Label text="Kategori:" GridPane.rowIndex="1" />
+          <Label prefHeight="18.0" prefWidth="84.0" text="Tanggal :" GridPane.rowIndex="2" />
+          <TextField promptText="Nominal" GridPane.columnIndex="1" />
+         <Label prefHeight="18.0" prefWidth="89.0" text="Nominal :" />
+         <TextField promptText="Keterangan" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <DatePicker prefHeight="26.0" prefWidth="190.0" promptText="Tanggal transaksi" showWeekNumbers="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+         </ChoiceBox>
+      </children>
+   </GridPane>
+   <HBox alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="608.0">
+        <Button text="Simpan">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+        </Button>
+        <Button text="Hapus">
+            <HBox.margin>
+                <Insets right="10.0" />
+            </HBox.margin>
+        </Button>
+        <Button text="Grafik">
+            <HBox.margin>
+                <Insets right="10.0" />
+            </HBox.margin>
+        </Button>
+   </HBox>
+   <StackPane styleClass="highlight-rectangle">
+     <TextField promptText="Masukan Kata Kunci" styleClass="transparent" />
+     <Button mnemonicParsing="false" styleClass="delete-button" text="Bersihkan" StackPane.alignment="CENTER_RIGHT" />
+   </StackPane>
+   <TableView layoutY="163.2" prefHeight="247.0" prefWidth="608.0">
+      <columns>
+         <TableColumn prefWidth="121.5999755859375" text="Tanggal" />
+          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="116.80001449584961" resizable="false" text="Nominal" />
+          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="125.60003662109375" resizable="false" text="Kategori" />
+          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="241.59999084472656" resizable="false" text="Keterangan" />
+      </columns>
+   </TableView>
+</VBox>
