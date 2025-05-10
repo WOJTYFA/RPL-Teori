@@ -39,6 +39,41 @@ public class keuanganController {
         loadCategories();
     }
 
+//    @FXML
+//    private void openPieChart() {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/piechart.fxml"));
+//            Stage stage = new Stage();
+//            stage.setScene(new Scene(loader.load()));
+//            stage.setTitle("Grafik Pengeluaran");
+//
+//            PieChartController controller = loader.getController();
+//            controller.setCurrentUser(currentUser);
+//
+//            stage.show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    @FXML
+    private void onBtnClickGrafik() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/piechart.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Grafik Pengeluaran");
+
+            PieChartController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     private void addTodo() {
         try {

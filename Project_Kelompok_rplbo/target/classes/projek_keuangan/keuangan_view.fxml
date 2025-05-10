@@ -17,6 +17,7 @@
         <Button onAction="#addTodo" text="Add" />
         <Button onAction="#editTodo" text="Edit Selected" />
         <Button onAction="#deleteTodo" text="Delete Selected" />
+      <Button mnemonicParsing="false" onAction="#onBtnClickGrafik" text="Grafik" />
         <Button onAction="#logout" text="Logout" />
         <Label text="Filter by Category:">
          <HBox.margin>
