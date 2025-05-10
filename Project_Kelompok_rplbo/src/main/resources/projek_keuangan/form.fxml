@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="projek_keuangan.controller.FormController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Form Pencatatan" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <!-- Catatan / Deskripsi -->
+    <HBox spacing="10">
+        <Label text="Catatan:" minWidth="100"/>
+        <TextArea fx:id="catatanArea" prefRowCount="3" prefColumnCount="20" promptText="Deskripsi"/>
+    </HBox>
+
+    <!-- Tanggal -->
+    <HBox spacing="10">
+        <Label text="Tanggal:" minWidth="100"/>
+        <DatePicker fx:id="datePicker"/>
+    </HBox>
+
+    <!-- Nominal -->
+    <HBox spacing="10">
+        <Label text="Nominal:" minWidth="100"/>
+        <TextField fx:id="nominalField" promptText="Masukkan nominal" prefWidth="150"/>
+    </HBox>
+
+    <!-- Kategori -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Kategori:" minWidth="100"/>
+        <ComboBox fx:id="kategoriCombo" promptText="Pilih kategori" prefWidth="150"/>
+        <TextField fx:id="kategoriBaruField" promptText="Kategori baru" prefWidth="120"/>
+        <Button text="Tambah Kategori" onAction="#handleAddCategory"/>
+    </HBox>
+
+    <!-- Simpan -->
+    <Button text="Simpan" onAction="#handleSaveTask" maxWidth="Infinity" style="-fx-font-size: 14px;"/>
+
+</VBox>
