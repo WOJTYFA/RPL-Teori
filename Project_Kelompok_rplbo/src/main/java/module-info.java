@@ -1,6 +1,8 @@
 module projek_keuangan {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+    requires java.prefs;
 
     exports projek_keuangan;
     opens projek_keuangan to javafx.fxml;
