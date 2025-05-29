@@ -12,6 +12,13 @@
 
     <Label text="Form Pencatatan" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
 
+    <!-- Tipe Transaksi -->
+    <HBox spacing="10">
+        <Label text="Tipe:" minWidth="100"/>
+        <RadioButton fx:id="radioPemasukan" text="Pemasukan" toggleGroup="$tipeTransaksiGroup" selected="true"/>
+        <RadioButton fx:id="radioPengeluaran" text="Pengeluaran" toggleGroup="$tipeTransaksiGroup"/>
+    </HBox>
+
     <!-- Catatan / Deskripsi -->
     <HBox spacing="10">
         <Label text="Catatan:" minWidth="100"/>

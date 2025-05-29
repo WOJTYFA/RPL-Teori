@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="projek_keuangan.controller.keuanganController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+
+    <Label fx:id="saldoLabel" text="Saldo: Rp. 0" style="-fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filter Kategori:"/>
+        <ComboBox fx:id="filterCombo" onAction="#filterTodos"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Tambah" onAction="#addTodo"/>
+        <Button text="Edit" onAction="#editTodo"/>
+        <Button text="Hapus" onAction="#deleteTodo"/>
+        <Button text="Grafik" onAction="#onBtnClickGrafik"/>
+        <Button text="Logout" onAction="#logout"/>
+    </HBox>
+
+    <TableView fx:id="todoTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="tanggalCol" text="Tanggal" prefWidth="100"/>
+            <TableColumn fx:id="tipeTransaksiCol" text="Tipe" prefWidth="100"/>
+            <TableColumn fx:id="nominalCol" text="Nominal" prefWidth="150"/>
+            <TableColumn fx:id="kategoriCol" text="Kategori" prefWidth="100"/>
+            <TableColumn fx:id="catatanCol" text="Catatan" prefWidth="300"/>
+        </columns>
+    </TableView>
+
+</VBox> 

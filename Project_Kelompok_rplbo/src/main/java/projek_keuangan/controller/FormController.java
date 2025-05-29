@@ -1,14 +1,20 @@
 package projek_keuangan.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
-import projek_keuangan.data.DataStore;
-import projek_keuangan.item.keuanganItem;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
+import projek_keuangan.data.DataStore;
+import projek_keuangan.item.keuanganItem;
 
 public class FormController {
     @FXML private DatePicker datePicker;
@@ -16,6 +22,11 @@ public class FormController {
     @FXML private TextArea catatanArea;
     @FXML private ComboBox<String> kategoriCombo;
     @FXML private TextField kategoriBaruField;
+    @FXML private RadioButton radioPemasukan;
+    @FXML private RadioButton radioPengeluaran;
+
+    // Kita akan membuat ToggleGroup secara manual di initialize
+    private ToggleGroup tipeTransaksiGroupManual;
 
     private int currentUserId;
     private String currentUsername;
@@ -26,15 +37,28 @@ public class FormController {
 
     @FXML
     private void initialize() {
+        // Initialize ToggleGroup manually
+        tipeTransaksiGroupManual = new ToggleGroup();
+        radioPemasukan.setToggleGroup(tipeTransaksiGroupManual);
+        radioPengeluaran.setToggleGroup(tipeTransaksiGroupManual);
+
         nominalField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\Rp.\\d*")) {
+            if (!newValue.matches("Rp\\.\\d*")) {
                 String plainNumber = newValue.replaceAll("[^\\d]", "");
-                nominalField.setText("Rp." + plainNumber);
+                if (!plainNumber.isEmpty()) {
+                    long number = Long.parseLong(plainNumber);
+                    String formatted = String.format("Rp.%,d", number);
+                    nominalField.setText(formatted);
+                } else {
+                    nominalField.setText("Rp.");
+                }
             }
         });
         datePicker.setValue(LocalDate.now());
+        
+        // Set default tipe transaksi
+        radioPemasukan.setSelected(true);
     }
-
 
     public void initData(int userId, String username, keuanganItem item, Runnable onSave) {
         this.currentUserId = userId;
@@ -63,11 +87,19 @@ public class FormController {
             nominalField.setText(item.getNominal());
             catatanArea.setText(item.getCatatan());
             kategoriCombo.setValue(item.getKategori());
+            
+            // Set tipe transaksi
+            if ("Pemasukan".equals(item.getTipeTransaksi())) {
+                radioPemasukan.setSelected(true);
+            } else {
+                radioPengeluaran.setSelected(true);
+            }
         } else {
             datePicker.setValue(LocalDate.now());
             nominalField.setText("Rp.");
             catatanArea.clear();
             kategoriCombo.setValue(null);
+            radioPemasukan.setSelected(true);
         }
     }
 
@@ -91,20 +123,22 @@ public class FormController {
         String nominalInput = nominalField.getText().trim();
         String catatan = catatanArea.getText().trim();
         String kategori = kategoriCombo.getValue();
+        // Gunakan selected radio button dari ToggleGroup manual
+        String tipeTransaksi = ((RadioButton) tipeTransaksiGroupManual.getSelectedToggle()).getText();
 
         if (tanggal.isEmpty() || nominalInput.equals("Rp.") || nominalInput.isEmpty() || catatan.isEmpty() || kategori == null || kategori.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Semua field harus diisi!");
             return;
         }
 
-        String nominalAngka = nominalInput.substring(3);
+        String nominalAngka = nominalInput.replace("Rp.", "").replace(".", "");
         if (!nominalAngka.matches("\\d+")) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Nominal harus berupa angka setelah 'Rp.'.");
             return;
         }
-        double nominalValue;
+
         try {
-            nominalValue = Double.parseDouble(nominalAngka);
+            double nominalValue = Double.parseDouble(nominalAngka);
             if (nominalValue <= 0) {
                 showAlert(Alert.AlertType.WARNING, "Validation Error", "Nominal harus lebih besar dari 0.");
                 return;
@@ -114,12 +148,12 @@ public class FormController {
             return;
         }
 
-
-        keuanganItem newItem = new keuanganItem(tanggal, nominalInput, catatan, kategori);
+        keuanganItem newItem = new keuanganItem(tanggal, nominalInput, catatan, kategori, tipeTransaksi);
 
         if (editingItem == null) {
             DataStore.addTodo(currentUserId, newItem);
         } else {
+            newItem.setId(editingItem.getId());
             DataStore.editTodo(currentUserId, editingItem, newItem);
         }
 
