@@ -1,24 +1,27 @@
 package projek_keuangan.controller;
 
+import java.io.IOException;
+
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import projek_keuangan.data.DataStore;
 import projek_keuangan.item.keuanganItem;
 import projek_keuangan.manager.SessionManager;
 
-import java.io.IOException;
-
 public class keuanganController {
     @FXML private TableView<keuanganItem> todoTable;
-    @FXML private TableColumn<keuanganItem, String> tanggalCol, nominalCol, catatanCol, kategoriCol;
+    @FXML private TableColumn<keuanganItem, String> tanggalCol, nominalCol, catatanCol, kategoriCol, tipeTransaksiCol;
     @FXML private ComboBox<String> filterCombo;
+    @FXML private Label saldoLabel;
 
     private String currentUsername;
     private int currentUserId = -1;
@@ -35,11 +38,13 @@ public class keuanganController {
         }
         loadTodos();
         loadCategories();
+        updateSaldo();
     }
 
     private void loadTodos() {
         if (currentUserId == -1) return;
         todoTable.setItems(FXCollections.observableArrayList(DataStore.getTodos(currentUserId)));
+        updateSaldo(); // Update saldo after loading todos
     }
 
     private void loadCategories() {
@@ -55,8 +60,28 @@ public class keuanganController {
     }
 
     public void refreshData() {
-        loadTodos();
         loadCategories();
+        filterCombo.setValue("All");
+        loadTodos();
+        updateSaldo(); // Update saldo after refreshing data
+    }
+
+    private void updateSaldo() {
+        if (currentUserId == -1) {
+            saldoLabel.setText("Saldo: N/A");
+            return;
+        }
+        double totalSaldo = DataStore.getTodos(currentUserId).stream()
+                .mapToDouble(item -> {
+                    double nominal = item.getNominalDouble();
+                    if ("Pemasukan".equals(item.getTipeTransaksi())) {
+                        return nominal;
+                    } else {
+                        return -nominal; // Pengeluaran mengurangi saldo
+                    }
+                })
+                .sum();
+        saldoLabel.setText(String.format("Saldo: Rp.%,.0f", totalSaldo));
     }
 
     @FXML
@@ -74,14 +99,12 @@ public class keuanganController {
             PieChartController controller = loader.getController();
             controller.setCurrentUsernameAndId(currentUsername, currentUserId);
 
-
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Could not load pie chart view.");
         }
     }
-
 
     @FXML
     private void addTodo() {
@@ -101,7 +124,7 @@ public class keuanganController {
             stage.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Could not load form to add transaction.");
+            showAlert(Alert.AlertType.ERROR, "Could not load form", "Error loading form: " + e.getMessage());
         }
     }
 
@@ -151,6 +174,7 @@ public class keuanganController {
             todoTable.setItems(FXCollections.observableArrayList(
                     DataStore.getTodos(currentUserId).stream().filter(i -> i.getKategori().equals(filter)).toList()
             ));
+            updateSaldo(); // Update saldo after filtering
         }
     }
 
@@ -171,9 +195,27 @@ public class keuanganController {
     @FXML
     private void initialize() {
         tanggalCol.setCellValueFactory(data -> data.getValue().tanggalProperty());
+        tipeTransaksiCol.setCellValueFactory(data -> data.getValue().tipeTransaksiProperty());
         nominalCol.setCellValueFactory(data -> data.getValue().nominalProperty());
-        catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
         kategoriCol.setCellValueFactory(data -> data.getValue().kategoriProperty());
+        catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
+
+        // Apply row style based on tipeTransaksi
+        todoTable.setRowFactory(tv -> new TableRow<keuanganItem>() {
+            @Override
+            protected void updateItem(keuanganItem item, boolean empty) {
+                super.updateItem(item, empty);
+                getStyleClass().remove("pemasukan-row");
+                getStyleClass().remove("pengeluaran-row");
+                if (item != null && !empty) {
+                    if ("Pemasukan".equals(item.getTipeTransaksi())) {
+                        getStyleClass().add("pemasukan-row");
+                    } else if ("Pengeluaran".equals(item.getTipeTransaksi())) {
+                        getStyleClass().add("pengeluaran-row");
+                    }
+                }
+            }
+        });
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

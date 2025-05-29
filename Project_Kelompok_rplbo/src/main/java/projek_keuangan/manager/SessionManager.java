@@ -33,6 +33,7 @@ public class SessionManager {
     public static void logoutUser() {
         prefs.remove(KEY_LOGGED_IN_USER);
         try {
+            prefs.clear();
             prefs.flush();
         } catch (BackingStoreException e) {
             System.err.println("Error flushing preferences during logout: " + e.getMessage());

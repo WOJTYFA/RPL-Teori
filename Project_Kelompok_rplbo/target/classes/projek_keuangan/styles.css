@@ -1,0 +1,18 @@
+.pemasukan-row {
+    -fx-control-inner-background: #e0f2f7; /* Light blue background */
+    -fx-base: #e0f2f7;
+}
+
+.pengeluaran-row {
+    -fx-control-inner-background: #ffebee; /* Light red background */
+    -fx-base: #ffebee;
+}
+
+/* Optional: Style text color as well */
+.pemasukan-row .text {
+    -fx-fill: #0277bd; /* Darker blue text */
+}
+
+.pengeluaran-row .text {
+    -fx-fill: #c62828; /* Darker red text */
+} 

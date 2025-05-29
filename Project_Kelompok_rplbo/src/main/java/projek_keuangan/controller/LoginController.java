@@ -30,7 +30,7 @@ public class LoginController {
         if (user != null) {
             SessionManager.loginUser(user.getUsername()); // Simpan sesi pengguna
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan_view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan-view.fxml"));
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 Scene scene = new Scene(loader.load());
                 keuanganController controller = loader.getController();

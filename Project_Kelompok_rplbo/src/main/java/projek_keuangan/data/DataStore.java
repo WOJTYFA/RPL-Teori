@@ -1,12 +1,16 @@
 package projek_keuangan.data;
 
-import projek_keuangan.manager.DatabaseManager;
-import projek_keuangan.item.keuanganItem;
-import projek_keuangan.item.User;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import projek_keuangan.item.User;
+import projek_keuangan.item.keuanganItem;
+import projek_keuangan.manager.DatabaseManager;
 
 public class DataStore {
 
@@ -92,24 +96,30 @@ public class DataStore {
     // FINANCIAL RECORDS MANAGEMENT
     public static List<keuanganItem> getTodos(int userId) {
         List<keuanganItem> items = new ArrayList<>();
-        // Ambil juga ID dari financial_records jika Anda ingin menambahkannya ke keuanganItem
-        // String sql = "SELECT id, tanggal, nominal, catatan, kategori FROM financial_records WHERE user_id = ?";
-        String sql = "SELECT tanggal, nominal, catatan, kategori FROM financial_records WHERE user_id = ? ORDER BY tanggal DESC"; // Tambahkan ORDER BY
+        String sql = "SELECT id, tanggal, nominal, catatan, kategori, tipe_transaksi FROM financial_records WHERE user_id = ? ORDER BY tanggal DESC";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                //  Jika Anda tidak menyimpan "Rp." di database:
-                String nominalStr = String.format("Rp.%.0f", rs.getDouble("nominal"));
-                //  Jika Anda ingin menyimpan ID item (misal, `keuanganItem` punya field `id`):
-                //  int itemId = rs.getInt("id");
+                int id = rs.getInt("id");
+                String tanggal = rs.getString("tanggal");
+                double nominalValue = rs.getDouble("nominal");
+                String catatan = rs.getString("catatan");
+                String kategori = rs.getString("kategori");
+                String tipeTransaksi = rs.getString("tipe_transaksi");
+
+                String nominalStr = String.format("Rp.%,.0f", nominalValue);
+                System.out.println("Ambil data: id=" + id + ", tanggal=" + tanggal + ", nominalDouble=" + nominalValue + ", catatan=" + catatan + ", kategori=" + kategori + ", tipe=" + tipeTransaksi);
+
                 items.add(new keuanganItem(
-                        // itemId, // jika ada
-                        rs.getString("tanggal"),
+                        id,
+                        tanggal,
                         nominalStr,
-                        rs.getString("catatan"),
-                        rs.getString("kategori")
+                        catatan,
+                        kategori,
+                        tipeTransaksi,
+                        nominalValue
                 ));
             }
         } catch (SQLException e) {
@@ -120,72 +130,57 @@ public class DataStore {
     }
 
     public static void addTodo(int userId, keuanganItem item) {
-        String sql = "INSERT INTO financial_records(user_id, tanggal, nominal, catatan, kategori) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO financial_records(user_id, tanggal, nominal, catatan, kategori, tipe_transaksi) VALUES(?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, userId);
             pstmt.setString(2, item.getTanggal());
-            double nominalValue = Double.parseDouble(item.getNominal().replaceAll("[^\\d.,]", "").replace(",", "."));
-            pstmt.setDouble(3, nominalValue);
+            pstmt.setDouble(3, Double.parseDouble(item.getNominal().replace("Rp.", "").replace(".", "").replace(",", ".")));
             pstmt.setString(4, item.getCatatan());
             pstmt.setString(5, item.getKategori());
-            pstmt.executeUpdate();
+            pstmt.setString(6, item.getTipeTransaksi());
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        item.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
         } catch (SQLException | NumberFormatException e) {
             System.err.println("Error adding financial record: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Idealnya, item punya ID unik untuk remove dan edit.
-    // Menggunakan kombinasi field bisa berisiko jika ada duplikat data (kecuali tanggal, nominal, catatan, kategori dianggap unik per user).
-    // Jika keuanganItem dimodifikasi untuk memiliki ID dari database, gunakan ID itu.
     public static void removeTodo(int userId, keuanganItem item) {
-        // Asumsi sementara: menghapus berdasarkan konten jika tidak ada ID unik pada item
-        // Jika item memiliki ID unik (misalnya setelah diambil dari DB):
-        // String sql = "DELETE FROM financial_records WHERE id = ? AND user_id = ?";
-        // pstmt.setInt(1, item.getId());
-        // pstmt.setInt(2, userId);
-        String sql = "DELETE FROM financial_records WHERE user_id = ? AND tanggal = ? AND nominal = ? AND catatan = ? AND kategori = ?";
+        String sql = "DELETE FROM financial_records WHERE id = ? AND user_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setString(2, item.getTanggal());
-            double nominalValue = Double.parseDouble(item.getNominal().replaceAll("[^\\d.,]", "").replace(",", "."));
-            pstmt.setDouble(3, nominalValue);
-            pstmt.setString(4, item.getCatatan());
-            pstmt.setString(5, item.getKategori());
+            pstmt.setInt(1, item.getId());
+            pstmt.setInt(2, userId);
             pstmt.executeUpdate();
-        } catch (SQLException | NumberFormatException e) {
+        } catch (SQLException e) {
             System.err.println("Error removing financial record: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public static void editTodo(int userId, keuanganItem oldItem, keuanganItem newItem) {
-        // Sama seperti removeTodo, idealnya berdasarkan ID unik item yang akan di-edit.
-        // Jika oldItem memiliki ID unik:
-        // String sql = "UPDATE financial_records SET tanggal = ?, nominal = ?, catatan = ?, kategori = ? WHERE id = ? AND user_id = ?";
-        // pstmt.setInt(5, oldItem.getId());
-        // pstmt.setInt(6, userId);
-        String sql = "UPDATE financial_records SET tanggal = ?, nominal = ?, catatan = ?, kategori = ? " +
-                "WHERE user_id = ? AND tanggal = ? AND nominal = ? AND catatan = ? AND kategori = ?";
+        String sql = "UPDATE financial_records SET tanggal = ?, nominal = ?, catatan = ?, kategori = ?, tipe_transaksi = ? WHERE id = ? AND user_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            double newNominalValue = Double.parseDouble(newItem.getNominal().replaceAll("[^\\d.,]", "").replace(",", "."));
-            double oldNominalValue = Double.parseDouble(oldItem.getNominal().replaceAll("[^\\d.,]", "").replace(",", "."));
+            
+            String nominalStr = newItem.getNominal().replace("Rp.", "").replace(".", "").replace(",", ".");
+            double nominalValue = Double.parseDouble(nominalStr);
 
             pstmt.setString(1, newItem.getTanggal());
-            pstmt.setDouble(2, newNominalValue);
+            pstmt.setDouble(2, nominalValue);
             pstmt.setString(3, newItem.getCatatan());
             pstmt.setString(4, newItem.getKategori());
-
-            // Kondisi WHERE untuk menemukan oldItem
-            pstmt.setInt(5, userId);
-            pstmt.setString(6, oldItem.getTanggal());
-            pstmt.setDouble(7, oldNominalValue);
-            pstmt.setString(8, oldItem.getCatatan());
-            pstmt.setString(9, oldItem.getKategori());
+            pstmt.setString(5, newItem.getTipeTransaksi());
+            pstmt.setInt(6, oldItem.getId());
+            pstmt.setInt(7, userId);
 
             pstmt.executeUpdate();
         } catch (SQLException | NumberFormatException e) {
