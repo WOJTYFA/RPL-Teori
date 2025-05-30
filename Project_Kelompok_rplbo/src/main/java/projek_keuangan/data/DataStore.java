@@ -43,14 +43,23 @@ public class DataStore {
     }
 
     public static User findUser(String username, String password) {
+        System.out.println("Attempting login for: " + username);
         String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
+
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
+
             if (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"));
+                int id = rs.getInt("id");
+                String dbUsername = rs.getString("username");
+                System.out.println("User found: " + dbUsername + " with ID: " + id);
+                return new User(id, dbUsername, rs.getString("password"));
+            } else {
+                System.out.println("No user found with that username/password");
             }
         } catch (SQLException e) {
             System.err.println("Error finding user: " + e.getMessage());
