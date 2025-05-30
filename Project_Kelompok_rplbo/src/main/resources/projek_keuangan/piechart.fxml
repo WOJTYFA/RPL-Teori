@@ -16,11 +16,6 @@
             </padding>
             <Button text="Kembali" onAction="#handleBack"/>
         </HBox>
-        <HBox fx:id="buttonContainer" spacing="10">
-            <padding>
-                <Insets top="0" right="10" bottom="10" left="10"/>
-            </padding>
-        </HBox>
     </top>
 
     <center>
