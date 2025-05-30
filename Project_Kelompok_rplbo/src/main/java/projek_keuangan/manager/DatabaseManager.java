@@ -10,7 +10,7 @@ import java.sql.Statement;
 public class DatabaseManager {
     // Use absolute path to keuangan_app.db in the root project directory
     // Ensure the path uses forward slashes and the correct drive letter format for the URL
-    private static final String DB_URL = "jdbc:sqlite:/c:/Users/Lenovo/IdeaProjects/RPL-Teori/keuangan_app.db";
+    private static final String DB_URL = "jdbc:sqlite:keuangan_app.db";
 
     public static Connection getConnection() throws SQLException {
         System.out.println("Attempting to connect to database: " + DB_URL);
