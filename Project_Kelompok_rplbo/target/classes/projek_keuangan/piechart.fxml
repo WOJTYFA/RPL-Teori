@@ -20,7 +20,7 @@
 
             <!-- Navigation Bar -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-bar">
-                <Button onAction="#handleBack" styleClass="back-button" text="← Kembali" />
+                <Button fx:id="backButton" onAction="#handleBack" styleClass="back-button" text="← Kembali" />
                 <Label styleClass="page-title" text="Analisis Keuangan" />
             </HBox>
 

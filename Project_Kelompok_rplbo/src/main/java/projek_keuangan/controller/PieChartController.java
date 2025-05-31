@@ -2,6 +2,7 @@ package projek_keuangan.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
@@ -20,14 +21,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
-
+import javafx.application.Platform;
 
 public class PieChartController {
 
     @FXML private PieChart pieChart;
     @FXML private HBox buttonContainer;
-    @FXML private VBox customLegend;        // FIELD BARU
-    @FXML private ScrollPane legendScrollPane;  // FIELD BARU
+    @FXML private VBox customLegend;
+    @FXML private ScrollPane legendScrollPane;
+    @FXML private Button backButton;
 
     private String currentUsername;
     private int currentUserId = -1;
@@ -42,7 +44,8 @@ public class PieChartController {
         this.currentUsername = username;
         this.currentUserId = userId;
         loadItems();
-        showChart("Pengeluaran", "Distribusi Pengeluaran");
+        // Delay untuk memastikan UI sudah siap
+        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
     }
 
     private void loadItems() {
@@ -56,20 +59,21 @@ public class PieChartController {
 
     @FXML
     private void handleShowIncome() {
-        showChart("Pemasukan", "Distribusi Pemasukan");
+        Platform.runLater(() -> showChart("Pemasukan", "Distribusi Pemasukan"));
     }
 
     @FXML
     private void handleShowExpense() {
-        showChart("Pengeluaran", "Distribusi Pengeluaran");
+        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
     }
 
     private void showChart(String transactionType, String title) {
+        // Clear data terlebih dahulu
         pieChart.getData().clear();
         customLegend.getChildren().clear();
-        pieChart.setTitle(title + " - " + currentUsername);
 
-        setChartColors(transactionType);
+        // Set title
+        pieChart.setTitle(title + " - " + currentUsername);
 
         if (items == null || items.isEmpty()) {
             pieChart.setTitle("Tidak ada data " + title.toLowerCase() + " untuk " + currentUsername);
@@ -79,6 +83,7 @@ public class PieChartController {
         Map<String, Double> kategoriTotals = new HashMap<>();
         double totalAmount = 0;
 
+        // Hitung total per kategori
         for (keuanganItem item : items) {
             if (transactionType.equals(item.getTipeTransaksi())) {
                 String kategori = item.getKategori();
@@ -93,28 +98,30 @@ public class PieChartController {
             return;
         }
 
-        // Sort dan tambahkan data ke chart
-        final double finalTotalAmount = totalAmount;
-        kategoriTotals.entrySet().stream()
+        // Buat daftar kategori yang sudah diurutkan
+        List<Map.Entry<String, Double>> sortedKategori = kategoriTotals.entrySet().stream()
                 .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .forEach(entry -> {
-                    String label = String.format("%s", entry.getKey());
-                    pieChart.getData().add(new PieChart.Data(label, entry.getValue()));
-                });
+                .toList();
 
-        // Buat custom legend
-        createCustomLegend(kategoriTotals, finalTotalAmount);
+        // Tambahkan data ke chart dengan urutan yang sama
+        for (Map.Entry<String, Double> entry : sortedKategori) {
+            String label = String.format("%s", entry.getKey());
+            pieChart.getData().add(new PieChart.Data(label, entry.getValue()));
+        }
+
+        // Set warna chart dan buat custom legend dengan urutan yang sama
+        final double finalTotalAmount = totalAmount;
+        Platform.runLater(() -> {
+            setChartColors(transactionType);
+            createCustomLegend(sortedKategori, finalTotalAmount);
+        });
     }
 
-    private void createCustomLegend(Map<String, Double> kategoriTotals, double totalAmount) {
+    private void createCustomLegend(List<Map.Entry<String, Double>> sortedKategori, double totalAmount) {
         customLegend.getChildren().clear();
 
         int colorIndex = 0;
-        for (Map.Entry<String, Double> entry : kategoriTotals.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .toList()) {
-
+        for (Map.Entry<String, Double> entry : sortedKategori) {
             String kategori = entry.getKey();
             double amount = entry.getValue();
             double percentage = (amount / totalAmount) * 100;
@@ -156,22 +163,68 @@ public class PieChartController {
 
 
     @FXML
-    private void handleBack() {
+    public void handleBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan_view.fxml"));
-            BorderPane root = loader.load();
+            // Replace with your actual main menu/dashboard FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan-view.fxml"));
+            // Alternative common paths:
+            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenu.fxml"));
+            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/view/MainMenu.fxml"));
 
+            Parent root = loader.load();
+
+            // Pass user data ke controller yang baru
             keuanganController controller = loader.getController();
-            if (currentUsername != null && currentUserId != -1) {
+            if (currentUsername != null) {
                 controller.setCurrentUser(currentUsername);
-            } else {
-                System.err.println("Cannot go back, currentUsername or currentUserId is invalid");
+            }
+            // Get current stage and switch scene
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+
+        } catch (IOException e) {
+            System.err.println("Error loading main menu: " + e.getMessage());
+            e.printStackTrace();
+
+            // Optional: Show error dialog to user
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Navigation Error");
+            alert.setHeaderText("Cannot navigate back");
+            alert.setContentText("Unable to load the main menu. Please check the FXML files.");
+            alert.showAndWait();
+        }
+    }
+
+    // Method untuk navigasi ke form (baru)
+    @FXML
+    private void handleGoToForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/form.fxml"));
+            Parent root = loader.load();
+
+            FormController controller = loader.getController();
+            if (currentUsername != null && currentUserId != -1) {
+                // Initialize form dengan data user saat ini
+                controller.initData(currentUserId, currentUsername, null, () -> {
+                    // Callback ketika form disimpan - refresh chart
+                    loadItems();
+                    // Refresh chart dengan tipe yang sedang aktif
+                    if (pieChart.getTitle().contains("Pemasukan")) {
+                        Platform.runLater(() -> showChart("Pemasukan", "Distribusi Pemasukan"));
+                    } else {
+                        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
+                    }
+                });
             }
 
             Stage stage = (Stage) pieChart.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Manajemen Keuangan - " + currentUsername);
+            stage.setTitle("Form Transaksi - " + currentUsername);
             stage.show();
 
         } catch (IOException e) {
@@ -179,7 +232,7 @@ public class PieChartController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Navigation Error");
             alert.setHeaderText("Kesalahan Navigasi");
-            alert.setContentText("Tidak dapat kembali ke halaman utama. Error: " + e.getMessage());
+            alert.setContentText("Tidak dapat membuka form. Error: " + e.getMessage());
             alert.showAndWait();
         }
     }
@@ -187,17 +240,22 @@ public class PieChartController {
     private void addChartTypeButtons() {
         Button incomeButton = new Button("💰 Tampilkan Pemasukan");
         incomeButton.setOnAction(e -> handleShowIncome());
-        incomeButton.getStyleClass().add("income-button"); // Tambahkan style class khusus
+        incomeButton.getStyleClass().add("income-button");
 
         Button expenseButton = new Button("💸 Tampilkan Pengeluaran");
         expenseButton.setOnAction(e -> handleShowExpense());
-        expenseButton.getStyleClass().add("expense-button"); // Tambahkan style class khusus
+        expenseButton.getStyleClass().add("expense-button");
 
-        // Clear existing buttons first (jika ada)
+        // Tombol untuk ke form (baru)
+        Button formButton = new Button("📝 Tambah Transaksi");
+        formButton.setOnAction(e -> handleGoToForm());
+        formButton.getStyleClass().add("form-button");
+
+        // Clear existing buttons first
         buttonContainer.getChildren().clear();
-
-        buttonContainer.getChildren().addAll(incomeButton, expenseButton);
+        buttonContainer.getChildren().addAll(incomeButton, expenseButton, formButton);
     }
+
     private void setChartColors(String transactionType) {
         // Reset semua styling
         pieChart.getStyleClass().removeAll("income-chart", "expense-chart");
