@@ -173,9 +173,7 @@ public class PieChartController {
             }
             // Get current stage and switch scene
             Stage stage = (Stage) backButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            stage.close();
 
 
         } catch (IOException e) {
