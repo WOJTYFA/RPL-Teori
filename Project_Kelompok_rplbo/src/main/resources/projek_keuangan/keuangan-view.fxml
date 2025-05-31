@@ -5,104 +5,37 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<BorderPane prefWidth="800" prefHeight="600" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="projek_keuangan.controller.keuanganController">
+<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="projek_keuangan.controller.keuanganController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
     <stylesheets>
-        <URL value="@keuangan.css"/>
+        <URL value="@styles.css"/>
     </stylesheets>
 
-    <!-- Header Section -->
-    <top>
-        <VBox styleClass="header-section">
-            <HBox styleClass="header-container" alignment="CENTER" spacing="20">
-                <VBox styleClass="saldo-container" alignment="CENTER_LEFT">
-                    <Label text="💰" styleClass="saldo-icon"/>
-                    <Label text="Total Saldo" styleClass="saldo-title"/>
-                    <Label fx:id="saldoLabel" text="Rp. 0" styleClass="saldo-amount"/>
-                </VBox>
+    <Label fx:id="saldoLabel" text="Saldo: Rp. 0" style="-fx-font-weight: bold;"/>
 
-                <Region HBox.hgrow="ALWAYS"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filter Kategori:"/>
+        <ComboBox fx:id="filterCombo" onAction="#filterTodos"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Tambah" onAction="#addTodo"/>
+        <Button text="Edit" onAction="#editTodo"/>
+        <Button text="Hapus" onAction="#deleteTodo"/>
+        <Button text="Grafik" onAction="#onBtnClickGrafik"/>
+        <Button text="Logout" onAction="#logout"/>
+    </HBox>
 
-                <VBox alignment="CENTER" spacing="5">
-                    <Label text="Dashboard Keuangan" styleClass="app-title"/>
-                    <Label text="Kelola keuangan dengan mudah" styleClass="app-subtitle"/>
-                </VBox>
+    <TableView fx:id="todoTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="tanggalCol" text="Tanggal" prefWidth="100"/>
+            <TableColumn fx:id="tipeTransaksiCol" text="Tipe" prefWidth="100"/>
+            <TableColumn fx:id="nominalCol" text="Nominal" prefWidth="150"/>
+            <TableColumn fx:id="kategoriCol" text="Kategori" prefWidth="100"/>
+            <TableColumn fx:id="catatanCol" text="Catatan" prefWidth="300"/>
+        </columns>
+    </TableView>
 
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button text="Logout" onAction="#logout" styleClass="logout-btn">
-                    <graphic>
-                        <Label text="🚪" styleClass="btn-icon"/>
-                    </graphic>
-                </Button>
-            </HBox>
-        </VBox>
-    </top>
-
-    <!-- Controls Section -->
-    <center>
-        <VBox spacing="0">
-            <HBox styleClass="controls-section" alignment="CENTER_LEFT" spacing="15">
-                <VBox alignment="CENTER_LEFT" spacing="5">
-                    <Label text="Filter Kategori" styleClass="filter-label"/>
-                    <ComboBox fx:id="filterCombo" onAction="#filterTodos" styleClass="filter-combo" prefWidth="150"/>
-                </VBox>
-
-                <Separator orientation="VERTICAL" prefHeight="40"/>
-
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button text="Tambah" onAction="#addTodo" styleClass="btn, btn-primary">
-                        <graphic>
-                            <Label text="➕" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Edit" onAction="#editTodo" styleClass="btn, btn-secondary">
-                        <graphic>
-                            <Label text="✏️" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Hapus" onAction="#deleteTodo" styleClass="btn, btn-danger">
-                        <graphic>
-                            <Label text="🗑️" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Grafik" onAction="#onBtnClickGrafik" styleClass="btn, btn-info">
-                        <graphic>
-                            <Label text="📊" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-                </HBox>
-            </HBox>
-
-            <!-- Table Section -->
-            <VBox styleClass="table-section" VBox.vgrow="ALWAYS">
-                <Label text="Daftar Transaksi" styleClass="section-title"/>
-
-                <TableView fx:id="todoTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
-                    <columns>
-                        <TableColumn fx:id="tanggalCol" text="📅 Tanggal" prefWidth="120" styleClass="table-header"/>
-                        <TableColumn fx:id="tipeTransaksiCol" text="💱 Tipe" prefWidth="110" styleClass="table-header"/>
-                        <TableColumn fx:id="nominalCol" text="💰 Nominal" prefWidth="140" styleClass="table-header"/>
-                        <TableColumn fx:id="kategoriCol" text="🏷️ Kategori" prefWidth="120" styleClass="table-header"/>
-                        <TableColumn fx:id="catatanCol" text="📝 Catatan" prefWidth="290" styleClass="table-header"/>
-                    </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                </TableView>
-            </VBox>
-        </VBox>
-    </center>
-
-    <!-- Footer -->
-    <bottom>
-        <HBox styleClass="footer-section" alignment="CENTER">
-            <Label text="© 2024 Aplikasi Keuangan - Kelola keuangan dengan bijak" styleClass="footer-text"/>
-        </HBox>
-    </bottom>
-
-</BorderPane>
+</VBox>
