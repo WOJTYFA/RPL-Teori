@@ -11,23 +11,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<StackPane prefHeight="600.0" prefWidth="800.0" styleClass="root-container" stylesheets="@login_styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projek_keuangan.controller.LoginController">
+<StackPane prefHeight="400.0" prefWidth="600.0" styleClass="root-container" stylesheets="@login_styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projek_keuangan.controller.LoginController">
 
     <!-- Background Decorative Elements -->
-    <Circle fill="#4f46e5" opacity="0.1" radius="150.0" translateX="-300.0" translateY="-200.0" />
-    <Circle fill="#06b6d4" opacity="0.08" radius="120.0" translateX="280.0" translateY="180.0" />
-    <Circle fill="#ec4899" opacity="0.06" radius="80.0" translateX="320.0" translateY="-150.0" />
+    <Circle fill="#4f46e5" opacity="0.1" radius="100.0" translateX="-200.0" translateY="-120.0" />
+    <Circle fill="#06b6d4" opacity="0.08" radius="80.0" translateX="180.0" translateY="100.0" />
+    <Circle fill="#ec4899" opacity="0.06" radius="60.0" translateX="220.0" translateY="-100.0" />
 
     <!-- Main Content Container -->
-    <VBox alignment="CENTER" maxWidth="420.0" styleClass="main-container">
+    <VBox alignment="CENTER" maxWidth="380.0" styleClass="main-container">
         <padding>
-            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            <Insets bottom="25.0" left="30.0" right="30.0" top="25.0" />
         </padding>
 
         <!-- Header Section -->
-        <VBox alignment="CENTER" spacing="8.0" styleClass="header-section">
+        <VBox alignment="CENTER" spacing="6.0" styleClass="header-section">
             <VBox.margin>
-                <Insets bottom="30.0" />
+                <Insets bottom="20.0" />
             </VBox.margin>
 
             <!-- Logo/Icon -->
@@ -39,13 +39,13 @@
         </VBox>
 
         <!-- Login Form -->
-        <VBox spacing="20.0" styleClass="form-container">
+        <VBox spacing="15.0" styleClass="form-container">
             <VBox.margin>
-                <Insets bottom="20.0" />
+                <Insets bottom="15.0" />
             </VBox.margin>
 
             <!-- Username Field Container -->
-            <VBox spacing="8.0" styleClass="input-group">
+            <VBox spacing="6.0" styleClass="input-group">
                 <Label styleClass="field-label" text="Username" />
                 <HBox styleClass="input-container">
                     <Region styleClass="input-icon user-icon" />
@@ -54,7 +54,7 @@
             </VBox>
 
             <!-- Password Field Container -->
-            <VBox spacing="8.0" styleClass="input-group">
+            <VBox spacing="6.0" styleClass="input-group">
                 <Label styleClass="field-label" text="Password" />
                 <HBox styleClass="input-container">
                     <Region styleClass="input-icon lock-icon" />
@@ -66,16 +66,16 @@
             <Label fx:id="messageLabel" styleClass="message-label" />
 
             <!-- Action Buttons -->
-            <VBox spacing="15.0" styleClass="button-group">
+            <VBox spacing="10.0" styleClass="button-group">
                 <VBox.margin>
-                    <Insets top="10.0" />
+                    <Insets top="5.0" />
                 </VBox.margin>
 
                 <!-- Login Button -->
                 <Button onAction="#handleLogin" styleClass="primary-button" text="Masuk" />
 
                 <!-- Divider -->
-                <HBox alignment="CENTER" spacing="15.0" styleClass="divider-container">
+                <HBox alignment="CENTER" spacing="10.0" styleClass="divider-container">
                     <Region styleClass="divider-line" />
                     <Label styleClass="divider-text" text="atau" />
                     <Region styleClass="divider-line" />
@@ -87,9 +87,9 @@
         </VBox>
 
         <!-- Footer -->
-        <VBox alignment="CENTER" spacing="5.0" styleClass="footer-section">
+        <VBox alignment="CENTER" spacing="3.0" styleClass="footer-section">
             <VBox.margin>
-                <Insets top="30.0" />
+                <Insets top="15.0" />
             </VBox.margin>
             <Label styleClass="footer-text" text="© 2025 MoneyTracker" />
             <Label styleClass="footer-subtext" text="Aplikasi manajemen keuangan terpercaya" />

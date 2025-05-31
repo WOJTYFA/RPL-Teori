@@ -1,42 +1,41 @@
-/* login_styles.css - JavaFX Compatible Modern Login Design */
+/* login_styles.css - JavaFX Compatible Modern Login Design - 600x400 */
 
 /* Root Container */
 .root-container {
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
-
+    /*-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);*/
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
 }
 
 /* Main Container */
 .main-container {
     -fx-background-color: rgba(255, 255, 255, 0.95);
-    -fx-background-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 25, 0, 0, 5);
-    -fx-border-radius: 20;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 4);
+    -fx-border-radius: 18;
     -fx-border-color: rgba(255, 255, 255, 0.3);
     -fx-border-width: 1;
 }
 
 /* Header Section */
 .header-section {
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 15 0;
 }
 
 /* App Logo */
 .app-logo {
-    -fx-min-width: 60;
-    -fx-min-height: 60;
-    -fx-max-width: 60;
-    -fx-max-height: 60;
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5 0%, #06b6d4 100%);
-    -fx-background-radius: 30;
-    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.3), 10, 0, 0, 3);
+    -fx-min-width: 45;
+    -fx-min-height: 45;
+    -fx-max-width: 45;
+    -fx-max-height: 45;
+    /*-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5 0%, #06b6d4 100%);*/
+    -fx-background-radius: 22.5;
+    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.3), 8, 0, 0, 2);
 }
 
 /* Typography */
 .main-title {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 32px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: #4f46e5;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
@@ -44,24 +43,24 @@
 
 .subtitle {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-text-fill: #64748b;
     -fx-opacity: 0.8;
 }
 
 /* Form Container */
 .form-container {
-    -fx-padding: 20 0 0 0;
+    -fx-padding: 15 0 0 0;
 }
 
 /* Input Groups */
 .input-group {
-    -fx-spacing: 8;
+    -fx-spacing: 6;
 }
 
 .field-label {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #374151;
     -fx-padding: 0 0 0 5;
@@ -71,26 +70,26 @@
 .input-container {
     -fx-alignment: center-left;
     -fx-background-color: white;
-    -fx-background-radius: 12;
+    -fx-background-radius: 10;
     -fx-border-color: #e5e7eb;
     -fx-border-width: 1.5;
-    -fx-border-radius: 12;
-    -fx-padding: 3 3 3 15;
-    -fx-spacing: 12;
+    -fx-border-radius: 10;
+    -fx-padding: 2 2 2 12;
+    -fx-spacing: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
 }
 
 .input-container:focused {
     -fx-border-color: #4f46e5;
-    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.15), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.15), 6, 0, 0, 2);
 }
 
 /* Input Icons */
 .input-icon {
-    -fx-min-width: 18;
-    -fx-min-height: 18;
-    -fx-max-width: 18;
-    -fx-max-height: 18;
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+    -fx-max-width: 16;
+    -fx-max-height: 16;
 }
 
 .user-icon {
@@ -106,13 +105,13 @@
 /* Text Fields */
 .modern-textfield {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-text-fill: #1f2937;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-insets: 0;
     -fx-border-insets: 0;
-    -fx-padding: 12 15 12 0;
+    -fx-padding: 10 12 10 0;
     -fx-prompt-text-fill: #9ca3af;
 }
 
@@ -126,13 +125,12 @@
 /* Message Label */
 .message-label {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 13px;
-    -fx-background-radius: 8;
-    -fx-padding: 8 12;
+    -fx-font-size: 12px;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
     -fx-opacity: 0;
     -fx-alignment: center;
 }
-
 
 /* Message Types */
 .error-message {
@@ -140,7 +138,7 @@
     -fx-background-color: rgba(239, 68, 68, 0.1);
     -fx-border-color: rgba(239, 68, 68, 0.3);
     -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-border-radius: 6;
 }
 
 .success-message {
@@ -148,7 +146,7 @@
     -fx-background-color: rgba(16, 185, 129, 0.1);
     -fx-border-color: rgba(16, 185, 129, 0.3);
     -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-border-radius: 6;
 }
 
 .loading-message {
@@ -156,48 +154,48 @@
     -fx-background-color: rgba(14, 165, 233, 0.1);
     -fx-border-color: rgba(14, 165, 233, 0.3);
     -fx-border-width: 1;
-    -fx-border-radius: 8;
+    -fx-border-radius: 6;
 }
 
 /* Button Group */
 .button-group {
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 8 0 0 0;
 }
 
 /* Primary Button */
 .primary-button {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4f46e5 0%, #7c3aed 100%);
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-padding: 15 30;
-    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.3), 8, 0, 0, 3);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 12 25;
+    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.3), 6, 0, 0, 2);
 }
 
 .primary-button:hover {
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4338ca 0%, #6d28d9 100%);
-    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.4), 12, 0, 0, 4);
+    /*-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4338ca 0%, #6d28d9 100%);*/
+    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.4), 8, 0, 0, 3);
 }
 
 .primary-button:pressed {
-    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.2), 4, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(79, 70, 229, 0.2), 3, 0, 0, 1);
 }
 
 /* Secondary Button */
 .secondary-button {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #4f46e5;
     -fx-background-color: rgba(79, 70, 229, 0.1);
-    -fx-background-radius: 12;
+    -fx-background-radius: 10;
     -fx-border-color: #4f46e5;
     -fx-border-width: 1.5;
-    -fx-border-radius: 12;
-    -fx-padding: 12 30;
+    -fx-border-radius: 10;
+    -fx-padding: 10 25;
 }
 
 .secondary-button:hover {
@@ -206,37 +204,37 @@
 
 /* Divider */
 .divider-container {
-    -fx-padding: 5 0;
+    -fx-padding: 3 0;
 }
 
 .divider-line {
     -fx-background-color: #e5e7eb;
     -fx-min-height: 1;
     -fx-max-height: 1;
-    -fx-pref-width: 100;
+    -fx-pref-width: 80;
 }
 
 .divider-text {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 12px;
+    -fx-font-size: 11px;
     -fx-text-fill: #9ca3af;
-    -fx-padding: 0 10;
+    -fx-padding: 0 8;
 }
 
 /* Footer */
 .footer-section {
-    -fx-padding: 20 0 0 0;
+    -fx-padding: 15 0 0 0;
 }
 
 .footer-text {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 12px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-text-fill: #6b7280;
 }
 
 .footer-subtext {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-text-fill: #9ca3af;
 }

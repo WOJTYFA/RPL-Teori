@@ -101,18 +101,51 @@ public class RegisterController implements Initializable {
     @FXML
     private void switchToLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/login-view.fxml"));
+            // Debug: Print current working directory
+            System.out.println("Current class path: " + getClass().getResource("/"));
+
+            // Try different possible paths
+            URL loginFXML = null;
+            String[] possiblePaths = {
+                    "/projek_keuangan/login-view.fxml",
+                    "/login-view.fxml",
+                    "/projek_keuangan/login.fxml",
+                    "/login.fxml",
+                    "login-view.fxml",
+                    "login.fxml"
+            };
+
+            for (String path : possiblePaths) {
+                loginFXML = getClass().getResource(path);
+                if (loginFXML != null) {
+                    System.out.println("Found FXML at: " + path);
+                    break;
+                }
+            }
+
+            if (loginFXML == null) {
+                showMessage("Login FXML file not found. Please check file location.", "error");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(loginFXML);
             Stage stage = (Stage) usernameField.getScene().getWindow();
             Scene scene = new Scene(loader.load());
 
-            // Apply login stylesheet
-            scene.getStylesheets().add(getClass().getResource("/projek_keuangan/styles/login-styles.css").toExternalForm());
+            // Try to apply stylesheet if it exists
+            URL cssURL = getClass().getResource("/projek_keuangan/styles/login-styles.css");
+            if (cssURL != null) {
+                scene.getStylesheets().add(cssURL.toExternalForm());
+            } else {
+                System.out.println("CSS file not found, continuing without styles");
+            }
 
             stage.setScene(scene);
             stage.setTitle("Login - Financial Management");
+
         } catch (Exception e) {
             e.printStackTrace();
-            showMessage("Error switching to login screen.", "error");
+            showMessage("Error switching to login screen: " + e.getMessage(), "error");
         }
     }
 
