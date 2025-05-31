@@ -44,8 +44,8 @@ public class PieChartController {
         this.currentUsername = username;
         this.currentUserId = userId;
         loadItems();
-        // Delay untuk memastikan UI sudah siap
-        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
+        // Direct call without Platform.runLater
+        showChart("Pengeluaran", "Distribusi Pengeluaran");
     }
 
     private void loadItems() {
@@ -59,12 +59,11 @@ public class PieChartController {
 
     @FXML
     private void handleShowIncome() {
-        Platform.runLater(() -> showChart("Pemasukan", "Distribusi Pemasukan"));
+        showChart("Pemasukan", "Distribusi Pemasukan");
     }
 
-    @FXML
     private void handleShowExpense() {
-        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
+        showChart("Pengeluaran", "Distribusi Pengeluaran");
     }
 
     private void showChart(String transactionType, String title) {
@@ -109,13 +108,11 @@ public class PieChartController {
             pieChart.getData().add(new PieChart.Data(label, entry.getValue()));
         }
 
-        // Set warna chart dan buat custom legend dengan urutan yang sama
-        final double finalTotalAmount = totalAmount;
-        Platform.runLater(() -> {
-            setChartColors(transactionType);
-            createCustomLegend(sortedKategori, finalTotalAmount);
-        });
+        // Set warna chart dan buat custom legend - direct call tanpa Platform.runLater
+        setChartColors(transactionType);
+        createCustomLegend(sortedKategori, totalAmount);
     }
+
 
     private void createCustomLegend(List<Map.Entry<String, Double>> sortedKategori, double totalAmount) {
         customLegend.getChildren().clear();
@@ -165,13 +162,8 @@ public class PieChartController {
     @FXML
     public void handleBack() {
         try {
-            // Replace with your actual main menu/dashboard FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan-view.fxml"));
-            // Alternative common paths:
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenu.fxml"));
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/view/MainMenu.fxml"));
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/keuangan-view.fxml"));
             Parent root = loader.load();
 
             // Pass user data ke controller yang baru
@@ -212,11 +204,11 @@ public class PieChartController {
                 controller.initData(currentUserId, currentUsername, null, () -> {
                     // Callback ketika form disimpan - refresh chart
                     loadItems();
-                    // Refresh chart dengan tipe yang sedang aktif
+                    // Refresh chart dengan tipe yang sedang aktif - direct call
                     if (pieChart.getTitle().contains("Pemasukan")) {
-                        Platform.runLater(() -> showChart("Pemasukan", "Distribusi Pemasukan"));
+                        showChart("Pemasukan", "Distribusi Pemasukan");
                     } else {
-                        Platform.runLater(() -> showChart("Pengeluaran", "Distribusi Pengeluaran"));
+                        showChart("Pengeluaran", "Distribusi Pengeluaran");
                     }
                 });
             }
