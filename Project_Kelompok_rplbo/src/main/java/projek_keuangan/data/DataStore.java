@@ -5,8 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import projek_keuangan.item.User;
 import projek_keuangan.item.keuanganItem;
@@ -196,5 +201,140 @@ public class DataStore {
             System.err.println("Error editing financial record: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    // Tambahkan di class DataStore
+    private static final Map<Integer, Double> userTargets = new HashMap<>();
+    private static final Map<Integer, Map<YearMonth, Double>> historicalTargets = new HashMap<>();
+
+    public static double getHistoricalTarget(int userId, YearMonth month) {
+        if (historicalTargets.containsKey(userId)) {
+            return historicalTargets.get(userId).getOrDefault(month, 0.0);
+        }
+        return 0.0;
+    }
+
+
+    public static void saveTarget(int userId, double amount, String category) {
+        // Jika "Semua Kategori", set category menjadi null
+        if ("Semua Kategori".equals(category)) {
+            category = null;
+        }
+
+        String monthYear = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        String sql = "INSERT INTO expense_targets (user_id, target_amount, category, month_year) " +
+                "VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setDouble(2, amount);
+            pstmt.setString(3, category);
+            pstmt.setString(4, monthYear);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Hapus target saat ini
+    public static void deleteCurrentTarget(int userId) {
+        String monthYear = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        String sql = "DELETE FROM expense_targets WHERE user_id = ? AND month_year = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, monthYear);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Dapatkan target saat ini
+    public static double getCurrentTarget(int userId) {
+        String monthYear = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        String sql = "SELECT SUM(target_amount) as total FROM expense_targets " +
+                "WHERE user_id = ? AND month_year = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, monthYear);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
+
+    // Dapatkan target historis
+    public static Map<YearMonth, Double> getHistoricalTargets(int userId) {
+        Map<YearMonth, Double> targets = new HashMap<>();
+        String sql = "SELECT month_year, SUM(target_amount) as total_target " +
+                "FROM expense_targets " +
+                "WHERE user_id = ? " +
+                "GROUP BY month_year";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String monthYear = rs.getString("month_year");
+                YearMonth ym = YearMonth.parse(monthYear, DateTimeFormatter.ofPattern("yyyy-MM"));
+                double total = rs.getDouble("total_target");
+                targets.put(ym, total);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return targets;
+    }
+
+    // Dapatkan daftar kategori
+    public static List<String> getCategories(int userId) {
+        List<String> categories = new ArrayList<>();
+        String sql = "SELECT DISTINCT kategori FROM financial_records WHERE user_id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                categories.add(rs.getString("kategori"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+
+    // Dapatkan daftar kategori hanya untuk pengeluaran
+    public static List<String> getExpenseCategories(int userId) {
+        List<String> categories = new ArrayList<>();
+        // Hanya ambil kategori dengan tipe transaksi = 'Pengeluaran'
+        String sql = "SELECT DISTINCT kategori FROM financial_records " +
+                "WHERE user_id = ? AND tipe_transaksi = 'Pengeluaran'";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                categories.add(rs.getString("kategori"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
     }
 }

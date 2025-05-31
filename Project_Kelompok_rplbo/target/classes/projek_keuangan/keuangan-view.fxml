@@ -56,7 +56,17 @@
         </HBox>
 
         <!-- Action Buttons -->
+
         <HBox spacing="6" alignment="CENTER">
+            <Button text="🎯 Target" onAction="#openTargetWindow"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #20c997, #198754);
+               -fx-text-fill: white;
+               -fx-font-weight: bold;
+               -fx-background-radius: 6;
+               -fx-cursor: hand;
+               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
             <Button text="➕ Tambah" onAction="#addTodo"
                     prefWidth="85" prefHeight="32"
                     style="-fx-background-color: linear-gradient(to bottom, #28a745, #218838);
