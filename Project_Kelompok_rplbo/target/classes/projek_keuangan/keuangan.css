@@ -1,0 +1,298 @@
+/* Global Styles */
+.root {
+    -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
+}
+
+/* Header Section */
+.header-section {
+    -fx-background-color: linear-gradient(to right, #4CAF50, #45a049);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 2);
+}
+
+.header-container {
+    -fx-padding: 20 30 20 30;
+    -fx-background-color: transparent;
+}
+
+.saldo-container {
+    -fx-spacing: 5;
+    -fx-padding: 15;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+}
+
+.saldo-icon {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+}
+
+.saldo-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-weight: 500;
+}
+
+.saldo-amount {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.app-title {
+    -fx-font-size: 28px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.app-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.logout-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+    -fx-border-radius: 25;
+    -fx-background-radius: 25;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.logout-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+}
+
+/* Controls Section */
+.controls-section {
+    -fx-background-color: white;
+    -fx-padding: 20 30 20 30;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.filter-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+    -fx-font-weight: 600;
+}
+
+.filter-combo {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14px;
+}
+
+.filter-combo:focused {
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(76, 175, 80, 0.3), 5, 0, 0, 0);
+}
+
+/* Button Styles */
+.btn {
+    -fx-padding: 12 20 12 20;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.btn:hover {
+    -fx-scale-y: 1.05;
+    -fx-scale-x: 1.05;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 3);
+}
+
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #45a049);
+    -fx-text-fill: white;
+}
+
+.btn-secondary {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-text-fill: white;
+}
+
+.btn-danger {
+    -fx-background-color: linear-gradient(to bottom, #f44336, #d32f2f);
+    -fx-text-fill: white;
+}
+
+.btn-info {
+    -fx-background-color: linear-gradient(to bottom, #FF9800, #F57C00);
+    -fx-text-fill: white;
+}
+
+.btn-icon {
+    -fx-font-size: 12px;
+}
+
+/* Table Section */
+.table-section {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20 30 20 30;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 0 0 15 0;
+}
+
+.modern-table {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.modern-table .column-header {
+    -fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    -fx-text-fill: #495057;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 15 12 15 12;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0 1 2 0;
+}
+
+.modern-table .column-header:last-child {
+    -fx-border-width: 0 0 2 0;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 12 12 12 12;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: rgba(76, 175, 80, 0.05);
+    -fx-scale-y: 1.02;
+}
+
+.modern-table .table-row-cell:selected {
+    -fx-background-color: rgba(76, 175, 80, 0.1);
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 0 0 2 0;
+}
+
+/* Row Styling based on Transaction Type */
+.pemasukan-row {
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 0 0 0 4;
+    -fx-background-color: rgba(76, 175, 80, 0.05);
+}
+
+.pengeluaran-row {
+    -fx-border-color: #f44336;
+    -fx-border-width: 0 0 0 4;
+    -fx-background-color: rgba(244, 67, 54, 0.05);
+}
+
+.pemasukan-row:hover {
+    -fx-background-color: rgba(76, 175, 80, 0.1);
+}
+
+.pengeluaran-row:hover {
+    -fx-background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Table Cell Styling */
+.modern-table .table-cell {
+    -fx-text-fill: #495057;
+    -fx-font-size: 13px;
+    -fx-padding: 12 12 12 12;
+}
+
+.modern-table .table-cell:selected {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: 500;
+}
+
+/* Footer Section */
+.footer-section {
+    -fx-background-color: #343a40;
+    -fx-padding: 10 30 10 30;
+}
+
+.footer-text {
+    -fx-text-fill: #adb5bd;
+    -fx-font-size: 12px;
+}
+
+/* Scrollbar Styling */
+.scroll-bar {
+    -fx-background-color: #f8f9fa;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #4CAF50;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #45a049;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #e9ecef;
+    -fx-background-radius: 5;
+}
+
+/* Separator Styling */
+.separator .line {
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1;
+}
+
+/* Animation Effects */
+.animated {
+    -fx-transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for 800x600 */
+@media screen and (max-width: 800px) {
+    .header-container {
+        -fx-padding: 15 20 15 20;
+    }
+
+    .controls-section {
+        -fx-padding: 15 20 15 20;
+    }
+
+    .table-section {
+        -fx-padding: 15 20 15 20;
+    }
+
+    .btn {
+        -fx-padding: 10 15 10 15;
+        -fx-font-size: 12px;
+    }
+
+    .app-title {
+        -fx-font-size: 24px;
+    }
+
+    .saldo-amount {
+        -fx-font-size: 20px;
+    }
+}
