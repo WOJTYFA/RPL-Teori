@@ -46,7 +46,8 @@
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
 
-                <PieChart fx:id="pieChart" animated="true" labelLineLength="15" legendVisible="false" styleClass="custom-pie-chart" title="Distribusi Pengeluaran per Kategori" />
+                <!-- Removed animated="true" and set to false -->
+                <PieChart fx:id="pieChart" animated="false" labelLineLength="15" legendVisible="false" styleClass="custom-pie-chart" title="Distribusi Pengeluaran per Kategori" />
             </VBox>
 
             <!-- Legend/List Container -->
