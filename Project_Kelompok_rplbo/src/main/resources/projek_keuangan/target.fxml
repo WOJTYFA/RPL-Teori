@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="projek_keuangan.controller.TargetController"
+            prefWidth="600" prefHeight="400"
+            style="-fx-background-color: transparent;">
+
+    <VBox spacing="15" style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);">
+        <padding>
+            <Insets top="15" right="15" bottom="15" left="15"/>
+        </padding>
+
+        <stylesheets>
+            <URL value="@styles.css"/>
+        </stylesheets>
+
+        <!-- Header -->
+        <HBox alignment="CENTER" spacing="10"
+              style="-fx-background-color: linear-gradient(to right, #6f42c1, #5a32a3);
+                     -fx-background-radius: 8;
+                     -fx-padding: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);">
+            <Label text="🎯" style="-fx-font-size: 18px;"/>
+            <Label text="Pengaturan Target Pengeluaran"
+                   style="-fx-font-size: 14px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;"/>
+        </HBox>
+
+        <!-- Current Status Card -->
+        <VBox spacing="10"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 8;
+                     -fx-padding: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);">
+
+            <Label text="📊 Status Target Saat Ini"
+                   style="-fx-font-size: 13px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #495057;"/>
+
+            <GridPane hgap="8" vgap="6">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="130"/>
+                    <ColumnConstraints prefWidth="200"/>
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints prefHeight="25"/>
+                    <RowConstraints prefHeight="25"/>
+                    <RowConstraints prefHeight="25"/>
+                </rowConstraints>
+
+                <Label text="Target Bulanan:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       style="-fx-font-size: 12px; -fx-text-fill: #6c757d;"/>
+                <Label fx:id="currentTargetLabel" text="Belum diset" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #495057;"/>
+
+                <Label text="Pengeluaran Bulan Ini:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       style="-fx-font-size: 12px; -fx-text-fill: #6c757d;"/>
+                <Label fx:id="currentExpenseLabel" text="Rp. 0" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #495057;"/>
+
+                <Label text="Status:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                       style="-fx-font-size: 12px; -fx-text-fill: #6c757d;"/>
+                <Label fx:id="statusLabel" text="Normal" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
+            </GridPane>
+
+            <ProgressBar fx:id="progressBar" prefWidth="350" prefHeight="15"
+                         style="-fx-accent: #28a745; -fx-padding: 5 0 0 0;"/>
+            <Label fx:id="progressLabel" text="0% dari target tercapai"
+                   style="-fx-font-size: 11px; -fx-text-fill: #6c757d; -fx-alignment: center;"/>
+        </VBox>
+
+        <!-- Target Setting Form -->
+        <VBox spacing="10"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 8;
+                     -fx-padding: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);">
+
+            <Label text="⚙️ Atur Target Baru"
+                   style="-fx-font-size: 13px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #495057;"/>
+
+            <VBox spacing="6">
+                <Label text="Target Pengeluaran Bulanan (Rp):"
+                       style="-fx-font-size: 12px; -fx-text-fill: #495057; -fx-font-weight: 500;"/>
+                <TextField fx:id="targetField" promptText="Masukkan target pengeluaran..."
+                           prefHeight="30"
+                           style="-fx-background-color: #f8f9fa;
+                                  -fx-border-color: #dee2e6;
+                                  -fx-border-radius: 4;
+                                  -fx-padding: 5 8;
+                                  -fx-font-size: 12px;"/>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Kategori Target:"
+                       style="-fx-font-size: 12px; -fx-text-fill: #495057; -fx-font-weight: 500;"/>
+                <ComboBox fx:id="categoryCombo" prefWidth="350" prefHeight="30"
+                          style="-fx-background-color: #f8f9fa;
+                                 -fx-border-color: #dee2e6;
+                                 -fx-border-radius: 4;
+                                 -fx-font-size: 12px;"/>
+            </VBox>
+
+            <HBox spacing="8" alignment="CENTER" style="-fx-padding: 8 0 0 0;">
+                <Button text="💾 Simpan" onAction="#saveTarget"
+                        prefWidth="100" prefHeight="30"
+                        style="-fx-background-color: linear-gradient(to bottom, #28a745, #218838);
+                               -fx-text-fill: white;
+                               -fx-font-size: 12px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 4;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+                <Button text="🗑️ Hapus" onAction="#deleteTarget"
+                        prefWidth="100" prefHeight="30"
+                        style="-fx-background-color: linear-gradient(to bottom, #dc3545, #c82333);
+                               -fx-text-fill: white;
+                               -fx-font-size: 12px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 4;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+                <Button text="❌ Tutup" onAction="#closeWindow"
+                        prefWidth="100" prefHeight="30"
+                        style="-fx-background-color: linear-gradient(to bottom, #6c757d, #5a6268);
+                               -fx-text-fill: white;
+                               -fx-font-size: 12px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 4;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+            </HBox>
+        </VBox>
+
+        <!-- Target History -->
+        <VBox spacing="8"
+              style="-fx-background-color: white;
+             -fx-background-radius: 8;
+             -fx-padding: 12;
+             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);">
+
+            <Label text="📈 Riwayat Target"
+                   style="-fx-font-size: 13px;
+                  -fx-font-weight: bold;
+                  -fx-text-fill: #495057;"/>
+
+            <TableView fx:id="targetHistoryTable" prefHeight="100"
+                       style="-fx-background-color: #f8f9fa;
+                      -fx-border-color: #dee2e6;
+                      -fx-border-radius: 4;
+                      -fx-font-size: 11px;">
+                <columns>
+                    <TableColumn fx:id="monthCol" text="Bulan" prefWidth="120"/>
+                    <TableColumn fx:id="targetAmountCol" text="Target" prefWidth="100"/>
+                    <TableColumn fx:id="actualExpenseCol" text="Pengeluaran" prefWidth="120"/>
+                    <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

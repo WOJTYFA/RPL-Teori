@@ -43,6 +43,18 @@ public class DatabaseManager {
             stmt.execute(createFinancialRecordsTableSQL);
             System.out.println("Table 'financial_records' checked/created.");
 
+            String createTargetsTableSQL = "CREATE TABLE IF NOT EXISTS expense_targets (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "user_id INTEGER NOT NULL," +
+                    "target_amount REAL NOT NULL," +
+                    "category TEXT," +  // Boleh NULL untuk target keseluruhan
+                    "month_year TEXT NOT NULL," + // Format: yyyy-MM
+                    "created_at TEXT DEFAULT (datetime('now'))," +
+                    "FOREIGN KEY (user_id) REFERENCES users(id))";
+
+            stmt.execute(createTargetsTableSQL);
+            System.out.println("Table 'expense_targets' checked/created.");
+
             // Check and add tipe_transaksi column if it doesn't exist
             if (!columnExists(conn, "financial_records", "tipe_transaksi")) {
                 String addColumnSQL = "ALTER TABLE financial_records ADD COLUMN tipe_transaksi TEXT NOT NULL DEFAULT 'Pengeluaran'";

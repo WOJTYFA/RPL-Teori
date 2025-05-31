@@ -218,6 +218,28 @@ public class keuanganController {
         });
     }
 
+    @FXML
+    private void openTargetWindow() {
+        if (currentUserId == -1) {
+            showAlert(Alert.AlertType.WARNING, "Warning", "User data not loaded. Cannot open target setting.");
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projek_keuangan/target.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Target Pengeluaran - " + currentUsername);
+
+            TargetController controller = loader.getController();
+            controller.initData(currentUserId, currentUsername);
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load target view.");
+        }
+    }
+
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
