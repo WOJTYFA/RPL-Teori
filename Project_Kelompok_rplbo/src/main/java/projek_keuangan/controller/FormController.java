@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
@@ -24,9 +25,12 @@ public class FormController {
     @FXML private TextField kategoriBaruField;
     @FXML private RadioButton radioPemasukan;
     @FXML private RadioButton radioPengeluaran;
+    @FXML private Button saveButton;
+    @FXML private Button clearButton;
+    @FXML private Button addCategoryButton;
 
-    // Kita akan membuat ToggleGroup secara manual di initialize
-    private ToggleGroup tipeTransaksiGroupManual;
+    // ToggleGroup untuk RadioButton
+    private ToggleGroup tipeTransaksiGroup;
 
     private int currentUserId;
     private String currentUsername;
@@ -38,26 +42,35 @@ public class FormController {
     @FXML
     private void initialize() {
         // Initialize ToggleGroup manually
-        tipeTransaksiGroupManual = new ToggleGroup();
-        radioPemasukan.setToggleGroup(tipeTransaksiGroupManual);
-        radioPengeluaran.setToggleGroup(tipeTransaksiGroupManual);
+        tipeTransaksiGroup = new ToggleGroup();
+        radioPemasukan.setToggleGroup(tipeTransaksiGroup);
+        radioPengeluaran.setToggleGroup(tipeTransaksiGroup);
 
+        // Format nominal field dengan Rupiah
         nominalField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("Rp\\.\\d*")) {
+            if (!newValue.matches("Rp\\.\\s?\\d{1,3}(,\\d{3})*")) {
                 String plainNumber = newValue.replaceAll("[^\\d]", "");
                 if (!plainNumber.isEmpty()) {
-                    long number = Long.parseLong(plainNumber);
-                    String formatted = String.format("Rp.%,d", number);
-                    nominalField.setText(formatted);
+                    try {
+                        long number = Long.parseLong(plainNumber);
+                        String formatted = String.format("Rp. %,d", number).replace(",", ".");
+                        nominalField.setText(formatted);
+                    } catch (NumberFormatException e) {
+                        nominalField.setText("Rp. ");
+                    }
                 } else {
-                    nominalField.setText("Rp.");
+                    nominalField.setText("Rp. ");
                 }
             }
         });
+
+        // Set default values
         datePicker.setValue(LocalDate.now());
-        
-        // Set default tipe transaksi
         radioPemasukan.setSelected(true);
+        nominalField.setText("Rp. ");
+
+        // Setup clear button action
+        clearButton.setOnAction(e -> clearForm());
     }
 
     public void initData(int userId, String username, keuanganItem item, Runnable onSave) {
@@ -66,16 +79,11 @@ public class FormController {
         this.editingItem = item;
         this.onSaveCallback = onSave;
 
-        kategoriCombo.getItems().clear();
-        kategoriCombo.getItems().addAll(
-                DataStore.getTodos(this.currentUserId).stream()
-                        .map(keuanganItem::getKategori)
-                        .distinct()
-                        .sorted()
-                        .toList()
-        );
+        // Load existing categories
+        loadCategories();
 
         if (item != null) {
+            // Edit mode - populate fields with existing data
             try {
                 if (item.getTanggal() != null && !item.getTanggal().isEmpty()) {
                     datePicker.setValue(LocalDate.parse(item.getTanggal(), dateFormatter));
@@ -84,22 +92,34 @@ public class FormController {
                 System.err.println("Failed to parse date from item: " + item.getTanggal() + " - " + e.getMessage());
                 datePicker.setValue(LocalDate.now());
             }
+
             nominalField.setText(item.getNominal());
             catatanArea.setText(item.getCatatan());
             kategoriCombo.setValue(item.getKategori());
-            
-            // Set tipe transaksi
+
+            // Set transaction type
             if ("Pemasukan".equals(item.getTipeTransaksi())) {
                 radioPemasukan.setSelected(true);
             } else {
                 radioPengeluaran.setSelected(true);
             }
         } else {
-            datePicker.setValue(LocalDate.now());
-            nominalField.setText("Rp.");
-            catatanArea.clear();
-            kategoriCombo.setValue(null);
-            radioPemasukan.setSelected(true);
+            // New entry mode - set defaults
+            clearForm();
+        }
+    }
+
+    private void loadCategories() {
+        if (kategoriCombo != null) {
+            kategoriCombo.getItems().clear();
+            kategoriCombo.getItems().addAll(
+                    DataStore.getTodos(this.currentUserId).stream()
+                            .map(keuanganItem::getKategori)
+                            .distinct()
+                            .filter(kategori -> kategori != null && !kategori.trim().isEmpty())
+                            .sorted()
+                            .toList()
+            );
         }
     }
 
@@ -110,58 +130,120 @@ public class FormController {
             kategoriCombo.getItems().add(newCategory);
             kategoriCombo.setValue(newCategory);
             kategoriBaruField.clear();
-        } else if (newCategory.isEmpty()){
-            showAlert(Alert.AlertType.WARNING, "Input Error", "Category name cannot be empty.");
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Kategori '" + newCategory + "' berhasil ditambahkan!");
+        } else if (newCategory.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Nama kategori tidak boleh kosong.");
         } else {
-            showAlert(Alert.AlertType.INFORMATION, "Info", "Category already exists or is empty.");
+            showAlert(Alert.AlertType.INFORMATION, "Info", "Kategori sudah ada.");
         }
     }
 
     @FXML
     private void handleSaveTask() {
-        String tanggal = (datePicker.getValue() != null) ? datePicker.getValue().format(dateFormatter) : "";
-        String nominalInput = nominalField.getText().trim();
-        String catatan = catatanArea.getText().trim();
-        String kategori = kategoriCombo.getValue();
-        // Gunakan selected radio button dari ToggleGroup manual
-        String tipeTransaksi = ((RadioButton) tipeTransaksiGroupManual.getSelectedToggle()).getText();
-
-        if (tanggal.isEmpty() || nominalInput.equals("Rp.") || nominalInput.isEmpty() || catatan.isEmpty() || kategori == null || kategori.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Semua field harus diisi!");
+        // Validate inputs
+        if (!validateInputs()) {
             return;
         }
 
-        String nominalAngka = nominalInput.replace("Rp.", "").replace(".", "");
+        // Get form data
+        String tanggal = datePicker.getValue().format(dateFormatter);
+        String nominal = nominalField.getText().trim();
+        String catatan = catatanArea.getText().trim();
+        String kategori = kategoriCombo.getValue();
+        String tipeTransaksi = ((RadioButton) tipeTransaksiGroup.getSelectedToggle()).getText();
+
+        // Create new item
+        keuanganItem newItem = new keuanganItem(tanggal, nominal, catatan, kategori, tipeTransaksi);
+
+        try {
+            if (editingItem == null) {
+                // Add new item
+                DataStore.addTodo(currentUserId, newItem);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Transaksi berhasil disimpan!");
+            } else {
+                // Edit existing item
+                newItem.setId(editingItem.getId());
+                DataStore.editTodo(currentUserId, editingItem, newItem);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Transaksi berhasil diperbarui!");
+            }
+
+            // Execute callback and close window
+            if (onSaveCallback != null) {
+                onSaveCallback.run();
+            }
+
+            closeWindow();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Terjadi kesalahan saat menyimpan data: " + e.getMessage());
+        }
+    }
+
+    private boolean validateInputs() {
+        // Check date
+        if (datePicker.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Tanggal harus diisi!");
+            return false;
+        }
+
+        // Check nominal
+        String nominalInput = nominalField.getText().trim();
+        if (nominalInput.equals("Rp. ") || nominalInput.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Nominal harus diisi!");
+            return false;
+        }
+
+        // Validate nominal format and value
+        String nominalAngka = nominalInput.replace("Rp. ", "").replace(".", "");
         if (!nominalAngka.matches("\\d+")) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Nominal harus berupa angka setelah 'Rp.'.");
-            return;
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Format nominal tidak valid.");
+            return false;
         }
 
         try {
             double nominalValue = Double.parseDouble(nominalAngka);
             if (nominalValue <= 0) {
                 showAlert(Alert.AlertType.WARNING, "Validation Error", "Nominal harus lebih besar dari 0.");
-                return;
+                return false;
             }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.WARNING, "Validation Error", "Format nominal tidak valid.");
-            return;
+            return false;
         }
 
-        keuanganItem newItem = new keuanganItem(tanggal, nominalInput, catatan, kategori, tipeTransaksi);
-
-        if (editingItem == null) {
-            DataStore.addTodo(currentUserId, newItem);
-        } else {
-            newItem.setId(editingItem.getId());
-            DataStore.editTodo(currentUserId, editingItem, newItem);
+        // Check description
+        if (catatanArea.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Catatan/deskripsi harus diisi!");
+            return false;
         }
 
-        if (onSaveCallback != null) {
-            onSaveCallback.run();
+        // Check category
+        String kategori = kategoriCombo.getValue();
+        if (kategori == null || kategori.trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Kategori harus dipilih!");
+            return false;
         }
 
-        ((Stage) datePicker.getScene().getWindow()).close();
+        // Check transaction type
+        if (tipeTransaksiGroup.getSelectedToggle() == null) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Tipe transaksi harus dipilih!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void clearForm() {
+        datePicker.setValue(LocalDate.now());
+        nominalField.setText("Rp. ");
+        catatanArea.clear();
+        kategoriCombo.setValue(null);
+        kategoriBaruField.clear();
+        radioPemasukan.setSelected(true);
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) datePicker.getScene().getWindow();
+        stage.close();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

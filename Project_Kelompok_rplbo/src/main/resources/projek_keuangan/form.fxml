@@ -1,51 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="projek_keuangan.controller.FormController">
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="600" prefWidth="800" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 25%,  #f093fb 50%,#f5576c 75%,#4facfe 100%);                    -fx-background-size: 400% 400%;" styleClass="scroll-pane" stylesheets="@form.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projek_keuangan.controller.FormController">
 
-    <Label text="Form Pencatatan" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <VBox alignment="TOP_CENTER" maxWidth="750" spacing="20" styleClass="root">
+        <padding>
+            <Insets bottom="25" left="25" right="25" top="25" />
+        </padding>
 
-    <!-- Tipe Transaksi -->
-    <HBox spacing="10">
-        <Label text="Tipe:" minWidth="100"/>
-        <RadioButton fx:id="radioPemasukan" text="Pemasukan" toggleGroup="$tipeTransaksiGroup" selected="true"/>
-        <RadioButton fx:id="radioPengeluaran" text="Pengeluaran" toggleGroup="$tipeTransaksiGroup"/>
-    </HBox>
+        <!-- Floating Header Card with Glass Effect -->
+        <VBox alignment="CENTER" spacing="10" styleClass="glass-card">
+            <padding>
+                <Insets bottom="25" left="20" right="20" top="25" />
+            </padding>
 
-    <!-- Catatan / Deskripsi -->
-    <HBox spacing="10">
-        <Label text="Catatan:" minWidth="100"/>
-        <TextArea fx:id="catatanArea" prefRowCount="3" prefColumnCount="20" promptText="Deskripsi"/>
-    </HBox>
+            <!-- Animated Icon -->
+            <Label style="-fx-font-size: 32px;                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);                           -fx-rotate: 5;" styleClass="icon-label" text="💰" />
 
-    <!-- Tanggal -->
-    <HBox spacing="10">
-        <Label text="Tanggal:" minWidth="100"/>
-        <DatePicker fx:id="datePicker"/>
-    </HBox>
+            <Label style="-fx-font-size: 22px;                           -fx-font-weight: bold;                           -fx-text-fill: white;                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 3, 0, 0, 2);" text="Form Pencatatan Keuangan" />
+        </VBox>
 
-    <!-- Nominal -->
-    <HBox spacing="10">
-        <Label text="Nominal:" minWidth="100"/>
-        <TextField fx:id="nominalField" promptText="Masukkan nominal" prefWidth="150"/>
-    </HBox>
+        <!-- Main Form Card with Glass Morphism -->
+        <VBox spacing="18" styleClass="main-card">
+            <padding>
+                <Insets bottom="30" left="30" right="30" top="30" />
+            </padding>
 
-    <!-- Kategori -->
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Kategori:" minWidth="100"/>
-        <ComboBox fx:id="kategoriCombo" promptText="Pilih kategori" prefWidth="150"/>
-        <TextField fx:id="kategoriBaruField" promptText="Kategori baru" prefWidth="120"/>
-        <Button text="Tambah Kategori" onAction="#handleAddCategory"/>
-    </HBox>
+            <!-- Transaction Type Section with Cards -->
+            <VBox spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label styleClass="icon-label" text="💳" />
+                    <Label styleClass="section-header" text="Tipe Transaksi" />
+                </HBox>
 
-    <!-- Simpan -->
-    <Button text="Simpan" onAction="#handleSaveTask" maxWidth="Infinity" style="-fx-font-size: 14px;"/>
+                <HBox alignment="CENTER" spacing="12">
+                    <!-- Income Card -->
+                    <VBox fx:id="incomeCard" alignment="CENTER" spacing="6" styleClass="income-card,hoverable" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets bottom="15" left="15" right="15" top="15" />
+                        </padding>
+                        <Label style="-fx-font-size: 20px;" text="💰" />
+                        <RadioButton fx:id="radioPemasukan" selected="true" style="-fx-font-size: 13px;                                            -fx-text-fill: white;                                            -fx-font-weight: bold;" text="Pemasukan" />
+                    </VBox>
 
-</VBox>
+                    <!-- Expense Card -->
+                    <VBox fx:id="expenseCard" alignment="CENTER" spacing="6" styleClass="expense-card,hoverable" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets bottom="15" left="15" right="15" top="15" />
+                        </padding>
+                        <Label style="-fx-font-size: 20px;" text="💸" />
+                        <RadioButton fx:id="radioPengeluaran" style="-fx-font-size: 13px;                                            -fx-text-fill: white;                                            -fx-font-weight: bold;" text="Pengeluaran" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Modern Separator -->
+            <Separator styleClass="separator" />
+
+            <!-- Category Section -->
+            <VBox spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label styleClass="icon-label" text="🏷️" />
+                    <Label styleClass="section-header" text="Kategori" />
+                </HBox>
+
+                <HBox spacing="10">
+                    <ComboBox fx:id="kategoriCombo" editable="true" promptText="Pilih atau ketik kategori..." styleClass="combo-box" HBox.hgrow="ALWAYS" />
+
+                    <TextField fx:id="kategoriBaruField" prefWidth="150" promptText="Kategori baru..." styleClass="text-field" />
+
+                    <Button fx:id="addCategoryButton" onAction="#handleAddCategory" prefHeight="35" prefWidth="40" styleClass="add-button" text="➕" />
+                </HBox>
+            </VBox>
+
+            <!-- Description Section -->
+            <VBox spacing="12">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label styleClass="icon-label" text="📝" />
+                    <Label styleClass="section-header" text="Catatan / Deskripsi" />
+                </HBox>
+
+                <TextArea fx:id="catatanArea" prefRowCount="3" promptText="💭 Ceritakan tentang transaksi ini..." styleClass="text-area" wrapText="true" />
+
+                <Label styleClass="tip-label" text="💡 Tips: Berikan deskripsi yang jelas untuk memudahkan tracking keuangan" />
+            </VBox>
+
+            <!-- Date and Amount Section -->
+            <HBox spacing="15">
+                <!-- Date Section -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="6">
+                        <Label styleClass="icon-label" text="📅" />
+                        <Label styleClass="section-header" text="Tanggal" />
+                    </HBox>
+
+                    <DatePicker fx:id="datePicker" maxWidth="Infinity" styleClass="date-picker" />
+                </VBox>
+
+                <!-- Amount Section -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="6">
+                        <Label styleClass="icon-label" text="💵" />
+                        <Label styleClass="section-header" text="Nominal" />
+                    </HBox>
+
+                    <TextField fx:id="nominalField" promptText="Rp. 0" styleClass="text-field" />
+                </VBox>
+            </HBox>
+
+            <!-- Action Buttons -->
+            <HBox alignment="CENTER" spacing="12">
+                <Button fx:id="saveButton" onAction="#handleSaveTask" prefHeight="40" prefWidth="150" styleClass="save-button" text="💾 Simpan Transaksi" />
+
+                <Button fx:id="clearButton" prefHeight="40" prefWidth="130" styleClass="add-button" text="🔄 Reset Form" />
+            </HBox>
+
+            <!-- Footer Info -->
+            <VBox alignment="CENTER" spacing="5">
+                <Separator styleClass="separator" />
+                <Label styleClass="tip-label" text="📊 Data akan tersimpan secara otomatis" />
+                <Label styleClass="tip-label" text="Aplikasi Keuangan Personal v1.0" />
+            </VBox>
+        </VBox>
+    </VBox>
+</ScrollPane>
