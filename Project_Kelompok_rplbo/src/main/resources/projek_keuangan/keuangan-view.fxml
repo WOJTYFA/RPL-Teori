@@ -5,36 +5,119 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="projek_keuangan.controller.keuanganController">
+<VBox spacing="12" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="projek_keuangan.controller.keuanganController"
+      prefWidth="600" prefHeight="400"
+      style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);">
+
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="16" right="16" bottom="16" left="16"/>
     </padding>
 
     <stylesheets>
         <URL value="@styles.css"/>
     </stylesheets>
 
-    <Label fx:id="saldoLabel" text="Saldo: Rp. 0" style="-fx-font-weight: bold;"/>
-
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Filter Kategori:"/>
-        <ComboBox fx:id="filterCombo" onAction="#filterTodos"/>
+    <!-- Header Section with Balance -->
+    <HBox alignment="CENTER_LEFT" spacing="10"
+          style="-fx-background-color: linear-gradient(to right, #4a90e2, #357abd);
+                 -fx-background-radius: 8;
+                 -fx-padding: 12 16 12 16;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);">
+        <Label text="💰" style="-fx-font-size: 18px;"/>
+        <Label fx:id="saldoLabel" text="Saldo: Rp. 0"
+               style="-fx-font-size: 16px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: white;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Tambah" onAction="#addTodo"/>
-        <Button text="Edit" onAction="#editTodo"/>
-        <Button text="Hapus" onAction="#deleteTodo"/>
-        <Button text="Grafik" onAction="#onBtnClickGrafik"/>
-        <Button text="Logout" onAction="#logout"/>
+        <Label text="Dashboard Keuangan"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: rgba(255,255,255,0.9);"/>
     </HBox>
 
-    <TableView fx:id="todoTable" VBox.vgrow="ALWAYS">
+    <!-- Control Panel -->
+    <VBox spacing="8">
+        <!-- Filter Section -->
+        <HBox spacing="8" alignment="CENTER_LEFT"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 6;
+                     -fx-padding: 10 12 10 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);">
+            <Label text="🔍" style="-fx-font-size: 14px;"/>
+            <Label text="Filter Kategori:"
+                   style="-fx-font-size: 13px;
+                          -fx-text-fill: #495057;
+                          -fx-font-weight: 500;"/>
+            <ComboBox fx:id="filterCombo" onAction="#filterTodos"
+                      prefWidth="120"
+                      style="-fx-background-color: #f8f9fa;
+                             -fx-border-color: #dee2e6;
+                             -fx-border-radius: 4;"/>
+        </HBox>
+
+        <!-- Action Buttons -->
+        <HBox spacing="6" alignment="CENTER">
+            <Button text="➕ Tambah" onAction="#addTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #28a745, #218838);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="✏️ Edit" onAction="#editTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #ffc107, #e0a800);
+                           -fx-text-fill: #212529;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="🗑️ Hapus" onAction="#deleteTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #dc3545, #c82333);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="📊 Grafik" onAction="#onBtnClickGrafik"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #6f42c1, #5a32a3);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="🚪 Logout" onAction="#logout"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #6c757d, #5a6268);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+        </HBox>
+    </VBox>
+
+    <!-- Data Table -->
+    <TableView fx:id="todoTable" VBox.vgrow="ALWAYS"
+               style="-fx-background-color: white;
+                      -fx-background-radius: 8;
+                      -fx-border-color: #dee2e6;
+                      -fx-border-radius: 8;
+                      -fx-border-width: 1;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);">
         <columns>
-            <TableColumn fx:id="tanggalCol" text="Tanggal" prefWidth="100"/>
-            <TableColumn fx:id="tipeTransaksiCol" text="Tipe" prefWidth="100"/>
-            <TableColumn fx:id="nominalCol" text="Nominal" prefWidth="150"/>
-            <TableColumn fx:id="kategoriCol" text="Kategori" prefWidth="100"/>
-            <TableColumn fx:id="catatanCol" text="Catatan" prefWidth="300"/>
+            <TableColumn fx:id="tanggalCol" text="📅 Tanggal" prefWidth="90"/>
+            <TableColumn fx:id="tipeTransaksiCol" text="🔄 Tipe" prefWidth="80"/>
+            <TableColumn fx:id="nominalCol" text="💵 Nominal" prefWidth="120"/>
+            <TableColumn fx:id="kategoriCol" text="🏷️ Kategori" prefWidth="100"/>
+            <TableColumn fx:id="catatanCol" text="📝 Catatan" prefWidth="190"/>
         </columns>
     </TableView>
 

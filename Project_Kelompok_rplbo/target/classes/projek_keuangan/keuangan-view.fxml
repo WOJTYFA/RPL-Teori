@@ -5,104 +5,120 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<BorderPane prefWidth="800" prefHeight="600" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="projek_keuangan.controller.keuanganController">
+<VBox spacing="12" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="projek_keuangan.controller.keuanganController"
+      prefWidth="600" prefHeight="400"
+      style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);">
+
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
 
     <stylesheets>
-        <URL value="@keuangan.css"/>
+        <URL value="@styles.css"/>
     </stylesheets>
 
-    <!-- Header Section -->
-    <top>
-        <VBox styleClass="header-section">
-            <HBox styleClass="header-container" alignment="CENTER" spacing="20">
-                <VBox styleClass="saldo-container" alignment="CENTER_LEFT">
-                    <Label text="💰" styleClass="saldo-icon"/>
-                    <Label text="Total Saldo" styleClass="saldo-title"/>
-                    <Label fx:id="saldoLabel" text="Rp. 0" styleClass="saldo-amount"/>
-                </VBox>
+    <!-- Header Section with Balance -->
+    <HBox alignment="CENTER_LEFT" spacing="10"
+          style="-fx-background-color: linear-gradient(to right, #4a90e2, #357abd);
+                 -fx-background-radius: 8;
+                 -fx-padding: 12 16 12 16;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);">
+        <Label text="💰" style="-fx-font-size: 18px;"/>
+        <Label fx:id="saldoLabel" text="Saldo: Rp. 0"
+               style="-fx-font-size: 16px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: white;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Dashboard Keuangan"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: rgba(255,255,255,0.9);"/>
+    </HBox>
 
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <VBox alignment="CENTER" spacing="5">
-                    <Label text="Dashboard Keuangan" styleClass="app-title"/>
-                    <Label text="Kelola keuangan dengan mudah" styleClass="app-subtitle"/>
-                </VBox>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button text="Logout" onAction="#logout" styleClass="logout-btn">
-                    <graphic>
-                        <Label text="🚪" styleClass="btn-icon"/>
-                    </graphic>
-                </Button>
-            </HBox>
-        </VBox>
-    </top>
-
-    <!-- Controls Section -->
-    <center>
-        <VBox spacing="0">
-            <HBox styleClass="controls-section" alignment="CENTER_LEFT" spacing="15">
-                <VBox alignment="CENTER_LEFT" spacing="5">
-                    <Label text="Filter Kategori" styleClass="filter-label"/>
-                    <ComboBox fx:id="filterCombo" onAction="#filterTodos" styleClass="filter-combo" prefWidth="150"/>
-                </VBox>
-
-                <Separator orientation="VERTICAL" prefHeight="40"/>
-
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button text="Tambah" onAction="#addTodo" styleClass="btn, btn-primary">
-                        <graphic>
-                            <Label text="➕" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Edit" onAction="#editTodo" styleClass="btn, btn-secondary">
-                        <graphic>
-                            <Label text="✏️" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Hapus" onAction="#deleteTodo" styleClass="btn, btn-danger">
-                        <graphic>
-                            <Label text="🗑️" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Grafik" onAction="#onBtnClickGrafik" styleClass="btn, btn-info">
-                        <graphic>
-                            <Label text="📊" styleClass="btn-icon"/>
-                        </graphic>
-                    </Button>
-                </HBox>
-            </HBox>
-
-            <!-- Table Section -->
-            <VBox styleClass="table-section" VBox.vgrow="ALWAYS">
-                <Label text="Daftar Transaksi" styleClass="section-title"/>
-
-                <TableView fx:id="todoTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
-                    <columns>
-                        <TableColumn fx:id="tanggalCol" text="📅 Tanggal" prefWidth="120" styleClass="table-header"/>
-                        <TableColumn fx:id="tipeTransaksiCol" text="💱 Tipe" prefWidth="110" styleClass="table-header"/>
-                        <TableColumn fx:id="nominalCol" text="💰 Nominal" prefWidth="140" styleClass="table-header"/>
-                        <TableColumn fx:id="kategoriCol" text="🏷️ Kategori" prefWidth="120" styleClass="table-header"/>
-                        <TableColumn fx:id="catatanCol" text="📝 Catatan" prefWidth="290" styleClass="table-header"/>
-                    </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                </TableView>
-            </VBox>
-        </VBox>
-    </center>
-
-    <!-- Footer -->
-    <bottom>
-        <HBox styleClass="footer-section" alignment="CENTER">
-            <Label text="© 2024 Aplikasi Keuangan - Kelola keuangan dengan bijak" styleClass="footer-text"/>
+    <!-- Control Panel -->
+    <VBox spacing="8">
+        <!-- Filter Section -->
+        <HBox spacing="8" alignment="CENTER_LEFT"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 6;
+                     -fx-padding: 10 12 10 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);">
+            <Label text="🔍" style="-fx-font-size: 14px;"/>
+            <Label text="Filter Kategori:"
+                   style="-fx-font-size: 13px;
+                          -fx-text-fill: #495057;
+                          -fx-font-weight: 500;"/>
+            <ComboBox fx:id="filterCombo" onAction="#filterTodos"
+                      prefWidth="120"
+                      style="-fx-background-color: #f8f9fa;
+                             -fx-border-color: #dee2e6;
+                             -fx-border-radius: 4;"/>
         </HBox>
-    </bottom>
 
-</BorderPane>
+        <!-- Action Buttons -->
+        <HBox spacing="6" alignment="CENTER">
+            <Button text="➕ Tambah" onAction="#addTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #28a745, #218838);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="✏️ Edit" onAction="#editTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #ffc107, #e0a800);
+                           -fx-text-fill: #212529;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="🗑️ Hapus" onAction="#deleteTodo"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #dc3545, #c82333);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="📊 Grafik" onAction="#onBtnClickGrafik"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #6f42c1, #5a32a3);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+
+            <Button text="🚪 Logout" onAction="#logout"
+                    prefWidth="85" prefHeight="32"
+                    style="-fx-background-color: linear-gradient(to bottom, #6c757d, #5a6268);
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 6;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);"/>
+        </HBox>
+    </VBox>
+
+    <!-- Data Table -->
+    <TableView fx:id="todoTable" VBox.vgrow="ALWAYS"
+               style="-fx-background-color: white;
+                      -fx-background-radius: 8;
+                      -fx-border-color: #dee2e6;
+                      -fx-border-radius: 8;
+                      -fx-border-width: 1;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 2);">
+        <columns>
+            <TableColumn fx:id="tanggalCol" text="📅 Tanggal" prefWidth="90"/>
+            <TableColumn fx:id="tipeTransaksiCol" text="🔄 Tipe" prefWidth="80"/>
+            <TableColumn fx:id="nominalCol" text="💵 Nominal" prefWidth="120"/>
+            <TableColumn fx:id="kategoriCol" text="🏷️ Kategori" prefWidth="100"/>
+            <TableColumn fx:id="catatanCol" text="📝 Catatan" prefWidth="190"/>
+        </columns>
+    </TableView>
+
+</VBox>

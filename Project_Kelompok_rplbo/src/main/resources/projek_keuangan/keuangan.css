@@ -1,0 +1,184 @@
+/* Modern Financial Management Styles */
+
+/* Table Styling */
+.table-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #495057, #343a40);
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 8 4 8 4;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Table Row Styling */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f1f3f4;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 6 4 6 4;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8f9fa;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+    -fx-border-color: #2196f3;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f8ff;
+}
+
+/* Custom row styles for transaction types */
+.pemasukan-row {
+    -fx-background-color: #d4edda !important;
+    -fx-border-color: #c3e6cb !important;
+}
+
+.pemasukan-row .table-cell {
+    -fx-text-fill: #155724 !important;
+    -fx-font-weight: bold;
+}
+
+.pemasukan-row:selected {
+    -fx-background-color: #a3d9a4 !important;
+    -fx-border-color: #28a745 !important;
+}
+
+.pemasukan-row:selected .table-cell {
+    -fx-text-fill: #000000 !important;
+}
+
+.pengeluaran-row {
+    -fx-background-color: #f8d7da !important;
+    -fx-border-color: #f1aeb5 !important;
+}
+
+.pengeluaran-row .table-cell {
+    -fx-text-fill: #721c24 !important;
+    -fx-font-weight: bold;
+}
+
+.pengeluaran-row:selected {
+    -fx-background-color: #f1a4a8 !important;
+    -fx-border-color: #dc3545 !important;
+}
+
+.pengeluaran-row:selected .table-cell {
+    -fx-text-fill: #000000 !important;
+}
+
+/* Table Cell Styling */
+.table-cell {
+    -fx-text-fill: #212529 !important;
+    -fx-font-size: 12px;
+    -fx-padding: 6 8 6 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Ensure text is visible in all table cells */
+.table-row-cell .table-cell {
+    -fx-text-fill: #212529 !important;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #000000 !important;
+}
+
+/* Button Hover Effects */
+.button:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ComboBox Styling */
+.combo-box {
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.combo-box:focused {
+    -fx-border-color: #4a90e2;
+    -fx-border-width: 2;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #495057;
+    -fx-font-size: 12px;
+}
+
+/* Scrollbar Styling */
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: transparent;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: transparent;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #dee2e6;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #adb5bd;
+}
+
+/* Table Corner and Header Styling */
+.table-view .filler {
+    -fx-background-color: linear-gradient(to bottom, #495057, #343a40);
+}
+
+.table-view .corner {
+    -fx-background-color: linear-gradient(to bottom, #495057, #343a40);
+}
+
+/* Focus Indicator */
+.table-view:focused .table-row-cell:selected {
+    -fx-background-color: #cce7ff;
+    -fx-border-color: #0066cc;
+    -fx-border-width: 2;
+}
+
+/* Column Resize Handle */
+.table-view .column-resize-line {
+    -fx-background-color: #4a90e2;
+}
+
+/* Empty Table Placeholder */
+.table-view .placeholder .label {
+    -fx-text-fill: #6c757d;
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+}
