@@ -40,4 +40,26 @@ public class SessionManager {
             e.printStackTrace();
         }
     }
+
+
+        private static String currentUsername;
+        private static int currentUserId = -1;
+
+        public static void loginUser(String username, int userId) {
+            currentUsername = username;
+            currentUserId = userId;
+        }
+
+
+        public static String getCurrentUsername() {
+            return currentUsername;
+        }
+
+        public static int getCurrentUserId() {
+            return currentUserId;
+        }
+
+        public static boolean isLoggedIn() {
+            return currentUsername != null && currentUserId != -1;
+        }
 }

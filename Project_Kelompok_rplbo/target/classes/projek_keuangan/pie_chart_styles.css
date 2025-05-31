@@ -50,6 +50,7 @@
 /* ===== BUTTON CONTAINER ===== */
 .button-container {
     -fx-alignment: center;
+    -fx-spacing: 15;
 }
 
 .button-container .button {
@@ -328,6 +329,19 @@
     -fx-border-color: #b91c1c;
 }
 
+/* Styling untuk tombol form yang baru */
+.form-button {
+    -fx-background-color: linear-gradient(to bottom, #e0e7ff, #c7d2fe);
+    -fx-text-fill: #3730a3;
+    -fx-border-color: #6366f1;
+}
+
+.form-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #6366f1, #4f46e5);
+    -fx-text-fill: white;
+    -fx-border-color: #4338ca;
+}
+
 /* ===== CHART TYPE SPECIFIC STYLING ===== */
 .income-chart .chart-title {
     -fx-text-fill: #166534;
@@ -343,7 +357,7 @@
 }
 
 .custom-pie-chart .chart-pie:hover {
-    -fx-opacity: 1.0;
+    -fx-opacity: 0.9;
 }
 
 /* ===== RESPONSIVE ADJUSTMENTS ===== */

@@ -199,7 +199,15 @@ public class keuanganController {
         nominalCol.setCellValueFactory(data -> data.getValue().nominalProperty());
         kategoriCol.setCellValueFactory(data -> data.getValue().kategoriProperty());
         catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
+        tanggalCol.setCellValueFactory(data -> data.getValue().tanggalProperty());
+        tipeTransaksiCol.setCellValueFactory(data -> data.getValue().tipeTransaksiProperty());
+        nominalCol.setCellValueFactory(data -> data.getValue().nominalProperty());
+        kategoriCol.setCellValueFactory(data -> data.getValue().kategoriProperty());
+        catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
 
+        if (SessionManager.isLoggedIn()) {
+            setCurrentUser(SessionManager.getCurrentUsername());
+        }
         // Apply row style based on tipeTransaksi
         todoTable.setRowFactory(tv -> new TableRow<keuanganItem>() {
             @Override
